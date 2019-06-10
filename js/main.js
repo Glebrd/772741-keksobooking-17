@@ -32,7 +32,7 @@ var generateAdvertisements = function () {
       author: {avatar: 'img/avatars/user0' + parseInt(i + 1, 10) + '.png'},
       offer: {type: generateRandomNumber(offers.length)},
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(PinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}};
+      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}};
   }
   return advertisements;
 };
