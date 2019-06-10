@@ -14,7 +14,7 @@ var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
-var PinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
+var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
 
 // Создаём массив с типами предложений
 var offers = ['palace', 'flat', 'house', 'bungalo'];
