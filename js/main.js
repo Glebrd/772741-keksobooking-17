@@ -1,12 +1,10 @@
 'use strict';
 
 // Показываем блок .map, убрав в JS-коде у него класс.
-
-var showElement = function (hiddenElementClass, classToRemove) {
-  document.querySelector(hiddenElementClass).classList.remove(classToRemove);
+var showMap = function () {
+  document.querySelector('.map').classList.remove('map--faded');
 };
-
-showElement('.map', 'map--faded');
+showMap();
 
 // Задаём количество объявлений, размеры пина и ограничения по его расположению.
 var numberOfAdvertisements = 8;
