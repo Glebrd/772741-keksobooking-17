@@ -1,11 +1,5 @@
 'use strict';
 
-// Показываем блок .map, убрав в JS-коде у него класс.
-var showMap = function () {
-  document.querySelector('.map').classList.remove('map--faded');
-};
-showMap();
-
 // Задаём количество объявлений, размеры пина и ограничения по его расположению.
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
@@ -14,7 +8,13 @@ var PIN_MAX_Y = 630;
 var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
 
 // Создаём массив с типами предложений
-var offers = ['palace', 'flat', 'house', 'bungalo'];
+var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
+
+// Показываем блок .map, убрав в JS-коде у него класс.
+var showMap = function () {
+  document.querySelector('.map').classList.remove('map--faded');
+};
+showMap();
 
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
@@ -27,7 +27,7 @@ var generateAdvertisements = function () {
   for (var i = 0; i < NUMBER_OF_ADVERTISEMENTS; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + parseInt(i + 1, 10) + '.png'},
-      offer: {type: generateRandomNumber(offers.length)},
+      offer: {type: generateRandomNumber(OFFERS.length)},
       // Задаём расположение острого конца метки
       location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
