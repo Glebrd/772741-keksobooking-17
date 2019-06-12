@@ -7,7 +7,6 @@ var showMap = function () {
 showMap();
 
 // Задаём количество объявлений, размеры пина и ограничения по его расположению.
-var numberOfAdvertisements = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var PIN_MIN_Y = 130;
@@ -25,12 +24,13 @@ var generateRandomNumber = function (max) {
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
 var generateAdvertisements = function () {
   var advertisements = [];
-  for (var i = 0; i < numberOfAdvertisements; i++) {
+  for (var i = 0; i < NUMBER_OF_ADVERTISEMENTS; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + parseInt(i + 1, 10) + '.png'},
       offer: {type: generateRandomNumber(offers.length)},
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}};
+      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
+    };
   }
   return advertisements;
 };
@@ -53,14 +53,17 @@ var renderPin = function (advertisement) {
   return pinElement;
 };
 
-// Заполняем массив данными пинов
-var advertisements = generateAdvertisements();
-// Складываем новые элементы в контейцнер
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < numberOfAdvertisements; i++) {
-  fragment.appendChild(renderPin(advertisements[i]));
-}
+
+// Заполнили массив данных объявлений. Складываем новые элементы в контейцнер
+var addToFragment = function (advertisements) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < advertisements.length; i++) {
+    fragment.appendChild(renderPin(advertisements[i]));
+  }
+  return fragment;
+};
 
 // Добавляем элементы из контейцнера на страницу
-similarListElement.appendChild(fragment);
+var NUMBER_OF_ADVERTISEMENTS = 8;
 
+similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
