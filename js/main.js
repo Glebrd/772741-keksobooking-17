@@ -1,6 +1,7 @@
 'use strict';
 
 // Задаём количество объявлений, размеры пина и ограничения по его расположению.
+var NUMBER_OF_ADVERTISEMENTS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var PIN_MIN_Y = 130;
@@ -64,5 +65,4 @@ var addToFragment = function (advertisements) {
 };
 
 // Добавляем элементы из контейцнера на страницу
-var NUMBER_OF_ADVERTISEMENTS = 8;
 similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
