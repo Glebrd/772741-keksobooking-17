@@ -5,7 +5,6 @@ var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
-var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
 
 // Создаём массив с типами предложений
 var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
@@ -22,9 +21,10 @@ var generateRandomNumber = function (max) {
 };
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
-var generateAdvertisements = function () {
+var generateAdvertisements = function (NumberOfAdvertisements) {
+  var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
-  for (var i = 0; i < NUMBER_OF_ADVERTISEMENTS; i++) {
+  for (var i = 0; i < NumberOfAdvertisements; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + parseInt(i + 1, 10) + '.png'},
       offer: {type: generateRandomNumber(OFFERS.length)},
@@ -65,5 +65,4 @@ var addToFragment = function (advertisements) {
 
 // Добавляем элементы из контейцнера на страницу
 var NUMBER_OF_ADVERTISEMENTS = 8;
-
 similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
