@@ -24,7 +24,7 @@ var generateRandomNumber = function (max) {
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
 var generateAdvertisements = function (NumberOfAdvertisements) {
-  var pinMaxX = map.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
+  var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
   for (var i = 0; i < NumberOfAdvertisements; i++) {
     advertisements[i] = {
@@ -38,7 +38,7 @@ var generateAdvertisements = function (NumberOfAdvertisements) {
 };
 
 // Находим элемент в который будем вставлять новые элементы
-var similarListElement = map.querySelector('.map__pins');
+var similarListElement = document.querySelector('.map__pins');
 
 // Находим шаблон
 var pinTemplate = document.querySelector('#pin')
