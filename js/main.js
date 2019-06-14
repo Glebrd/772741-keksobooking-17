@@ -11,8 +11,9 @@ var PIN_MAX_Y = 630;
 var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
 
 // Показываем блок .map, убрав в JS-коде у него класс.
+var map = document.querySelector('.map');
 var showMap = function () {
-  document.querySelector('.map').classList.remove('map--faded');
+  map.classList.remove('map--faded');
 };
 showMap();
 
@@ -23,11 +24,11 @@ var generateRandomNumber = function (max) {
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
 var generateAdvertisements = function (NumberOfAdvertisements) {
-  var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
+  var pinMaxX = map.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
   for (var i = 0; i < NumberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: {avatar: 'img/avatars/user0' + parseInt(i + 1, 10) + '.png'},
+      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
       offer: {type: generateRandomNumber(OFFERS.length)},
       // Задаём расположение острого конца метки
       location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
@@ -37,7 +38,7 @@ var generateAdvertisements = function (NumberOfAdvertisements) {
 };
 
 // Находим элемент в который будем вставлять новые элементы
-var similarListElement = document.querySelector('.map__pins');
+var similarListElement = map.querySelector('.map__pins');
 
 // Находим шаблон
 var pinTemplate = document.querySelector('#pin')
@@ -49,8 +50,8 @@ var renderPin = function (advertisement) {
   var pinElement = pinTemplate.cloneNode(true);
   // Задаём расположение левого верхнего угла метки
   pinElement.style = 'left: ' + (parseInt(advertisement.location.x, 10) - PIN_WIDTH / 2) + 'px; top: ' + (parseInt(advertisement.location.y, 10) - PIN_HEIGHT) + 'px';
-  pinElement.children[0].src = advertisement.author.avatar;
-  pinElement.children[0].alt = ' ';
+  pinElement.querySelector('img').src = advertisement.author.avatar;
+  pinElement.querySelector('img').alt = ' ';
   return pinElement;
 };
 
