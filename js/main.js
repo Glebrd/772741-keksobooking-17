@@ -23,10 +23,10 @@ var generateRandomNumber = function (max) {
 };
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
-var generateAdvertisements = function (NumberOfAdvertisements) {
+var generateAdvertisements = function (numberOfAdvertisements) {
   var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
-  for (var i = 0; i < NumberOfAdvertisements; i++) {
+  for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
       offer: {type: generateRandomNumber(OFFERS.length)},
@@ -49,7 +49,7 @@ var pinTemplate = document.querySelector('#pin')
 var renderPin = function (advertisement) {
   var pinElement = pinTemplate.cloneNode(true);
   // Задаём расположение левого верхнего угла метки
-  pinElement.style = 'left: ' + (parseInt(advertisement.location.x, 10) - PIN_WIDTH / 2) + 'px; top: ' + (parseInt(advertisement.location.y, 10) - PIN_HEIGHT) + 'px';
+  pinElement.style = 'left: ' + (advertisement.location.x - PIN_WIDTH / 2) + 'px; top: ' + (advertisement.location.y - PIN_HEIGHT) + 'px';
   pinElement.querySelector('img').src = advertisement.author.avatar;
   pinElement.querySelector('img').alt = ' ';
   return pinElement;
