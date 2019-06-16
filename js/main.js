@@ -15,7 +15,7 @@ var map = document.querySelector('.map');
 var showMap = function () {
   map.classList.remove('map--faded');
 };
-showMap();
+// showMap();
 
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
@@ -67,3 +67,10 @@ var addToFragment = function (advertisements) {
 
 // Добавляем элементы из контейцнера на страницу
 similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+
+// Отключаем форму форму
+var form = document.querySelector('.ad-form');
+var fieldsets = form.getElementsByTagName('fieldset');
+for (var i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].disabled = true;
+}
