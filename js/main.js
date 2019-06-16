@@ -28,10 +28,10 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   var advertisements = [];
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: generateRandomNumber(OFFERS.length)},
+      author: { avatar: 'img/avatars/user0' + (i + 1) + '.png' },
+      offer: { type: generateRandomNumber(OFFERS.length) },
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
+      location: { x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT }
     };
   }
   return advertisements;
@@ -65,12 +65,28 @@ var addToFragment = function (advertisements) {
   return fragment;
 };
 
-// Добавляем элементы из контейцнера на страницу
-similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
-
-// Отключаем форму форму
+// Отключаем форму
+var mapPin = document.querySelector('.map__pin--main');
 var form = document.querySelector('.ad-form');
-var fieldsets = form.getElementsByTagName('fieldset');
-for (var i = 0; i < fieldsets.length; i++) {
-  fieldsets[i].disabled = true;
-}
+var toggleForm = function (isDisabled) {
+  var fieldsets = form.getElementsByTagName('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = isDisabled;
+  }
+  if (!isDisabled) {
+    form.classList.remove('ad-form--disabled');
+    // Добавляем элементы из контейцнера на страницу
+    similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+    mapPin.removeEventListener('click', enableMap);
+    showMap();
+  }
+};
+
+toggleForm(true);
+
+var enableMap = function () {
+  toggleForm(false);
+};
+
+mapPin.addEventListener('click', enableMap);
+
