@@ -10,13 +10,6 @@ var PIN_MAX_Y = 630;
 // Создаём массив с типами предложений
 var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
 
-// Показываем блок .map, убрав в JS-коде у него класс.
-var map = document.querySelector('.map');
-var showMap = function () {
-  map.classList.remove('map--faded');
-};
-// showMap();
-
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
   return Math.floor(Math.random() * max);
@@ -65,7 +58,15 @@ var addToFragment = function (advertisements) {
   return fragment;
 };
 
-// Отключаем форму
+// Показываем блок .map, убрав в JS-коде у него класс.
+var map = document.querySelector('.map');
+var showMap = function () {
+  map.classList.remove('map--faded');
+  // Добавляем элементы из контейцнера на страницу
+  similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+};
+
+// Вклюичение / Отключае формы
 var mapPin = document.querySelector('.map__pin--main');
 var form = document.querySelector('.ad-form');
 var toggleForm = function (isDisabled) {
@@ -73,20 +74,24 @@ var toggleForm = function (isDisabled) {
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].disabled = isDisabled;
   }
-  if (!isDisabled) {
+  // Ветка при отключении формы
+  debugger;
+  if (isDisabled && !form.classList.contains('ad-form--disabled')) {
+    form.classList.add('ad-form--disabled');
+  } else { // Ветка при включении формы
     form.classList.remove('ad-form--disabled');
-    // Добавляем элементы из контейцнера на страницу
-    similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
-    mapPin.removeEventListener('click', enableMap);
-    showMap();
   }
 };
 
+// Отключаем форму
 toggleForm(true);
 
-var enableMap = function () {
+// Делаем страницу активной
+var enablePage = function () {
   toggleForm(false);
+  showMap();
+  mapPin.removeEventListener('mouseup', enablePage);
 };
 
-mapPin.addEventListener('click', enableMap);
+mapPin.addEventListener('mouseup', enablePage);
 
