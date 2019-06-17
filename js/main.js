@@ -72,28 +72,29 @@ var showMap = function () {
 // Вклюичение / Отключае формы
 var mapPin = document.querySelector('.map__pin--main');
 var form = document.querySelector('.ad-form');
-var toggleForm = function (isDisabled) {
+var toggleForm = function (formIsDisabled) {
   var fieldsets = form.getElementsByTagName('fieldset');
   for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = isDisabled;
+    fieldsets[i].disabled = formIsDisabled;
   }
   // Ветка при отключении формы
-  if (isDisabled && !form.classList.contains('ad-form--disabled')) {
+  if (formIsDisabled && !form.classList.contains('ad-form--disabled')) {
     form.classList.add('ad-form--disabled');
-  } else if (!isDisabled) { // Ветка при включении формы
+  } else if (!formIsDisabled) { // Ветка при включении формы
     form.classList.remove('ad-form--disabled');
   }
 };
 
-// Отключаем форму
+// Отключение формы
 toggleForm(true);
 
-// Заполняем поле Адрес
+// Заполние поля Адрес
 var mainPinY = mapPin.offsetTop;
 var mainPinX = mapPin.offsetLeft;
+var address = document.getElementById('address');
 
 var fillAdressField = function (X, Y) {
-  document.getElementById('address').value = X + ', ' + Y;
+  address.value = X + ', ' + Y;
 };
 
 fillAdressField(mainPinX, mainPinY);
