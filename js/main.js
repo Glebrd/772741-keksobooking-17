@@ -4,8 +4,11 @@
 var NUMBER_OF_ADVERTISEMENTS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
+
 
 // Создаём массив с типами предложений
 var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
@@ -21,10 +24,10 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   var advertisements = [];
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: { avatar: 'img/avatars/user0' + (i + 1) + '.png' },
-      offer: { type: generateRandomNumber(OFFERS.length) },
+      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
+      offer: {type: generateRandomNumber(OFFERS.length)},
       // Задаём расположение острого конца метки
-      location: { x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT }
+      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
   }
   return advertisements;
@@ -75,10 +78,9 @@ var toggleForm = function (isDisabled) {
     fieldsets[i].disabled = isDisabled;
   }
   // Ветка при отключении формы
-  debugger;
   if (isDisabled && !form.classList.contains('ad-form--disabled')) {
     form.classList.add('ad-form--disabled');
-  } else { // Ветка при включении формы
+  } else if (!isDisabled) { // Ветка при включении формы
     form.classList.remove('ad-form--disabled');
   }
 };
@@ -86,11 +88,22 @@ var toggleForm = function (isDisabled) {
 // Отключаем форму
 toggleForm(true);
 
+// Заполняем поле Адрес
+var mainPinY = mapPin.offsetTop;
+var mainPinX = mapPin.offsetLeft;
+
+var fillAdressField = function (X, Y) {
+  document.getElementById('address').value = X + ', ' + Y;
+};
+
+fillAdressField(mainPinX, mainPinY);
+
 // Делаем страницу активной
 var enablePage = function () {
   toggleForm(false);
   showMap();
   mapPin.removeEventListener('mouseup', enablePage);
+  fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
 };
 
 mapPin.addEventListener('mouseup', enablePage);
