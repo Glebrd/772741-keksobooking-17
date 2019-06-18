@@ -8,10 +8,31 @@ var MAIN_PIN_WIDTH = 62;
 var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
+var ENABLE_FORM = false;
+var DISABLE_FORM = true;
+
+var OFFERS = [
+  {
+    housingtype: 'palace',
+    minprice: 10000,
+  },
+  {
+    housingtype: 'flat',
+    minprice: 5000,
+  },
+  {
+    housingtype: 'house',
+    minprice: 1000,
+  },
+  {
+    housingtype: 'bungalo',
+    minprice: 0,
+  }
+];
 
 
 // Создаём массив с типами предложений
-var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
+// var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
 
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
@@ -25,7 +46,7 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: generateRandomNumber(OFFERS.length)},
+      offer: {type: OFFERS[generateRandomNumber(OFFERS.length)].housingtype},
       // Задаём расположение острого конца метки
       location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
@@ -78,7 +99,7 @@ var toggleForm = function (formIsDisabled) {
     fieldsets[i].disabled = formIsDisabled;
   }
   // Ветка при отключении формы
-  if (formIsDisabled && !form.classList.contains('ad-form--disabled')) {
+  if (!form.classList.contains('ad-form--disabled')) {
     form.classList.add('ad-form--disabled');
   } else if (!formIsDisabled) { // Ветка при включении формы
     form.classList.remove('ad-form--disabled');
@@ -86,7 +107,7 @@ var toggleForm = function (formIsDisabled) {
 };
 
 // Отключение формы
-toggleForm(true);
+toggleForm(DISABLE_FORM);
 
 // Заполние поля Адрес
 var mainPinY = mapPin.offsetTop;
@@ -99,9 +120,9 @@ var fillAdressField = function (X, Y) {
 
 fillAdressField(mainPinX, mainPinY);
 
-// Делаем страницу активной
+// Делаем страницу
 var enablePage = function () {
-  toggleForm(false);
+  toggleForm(ENABLE_FORM);
   showMap();
   mapPin.removeEventListener('mouseup', enablePage);
   fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
@@ -109,3 +130,34 @@ var enablePage = function () {
 
 mapPin.addEventListener('mouseup', enablePage);
 
+
+// Валидация полейц "Тип жилья" и "Цена за ночь"
+var housingTypeSelect = document.querySelector('#type');
+var housingPriceInput = document.querySelector('#price');
+
+var housingTypeInputFill = function () {
+  for (var i = 0; i < OFFERS.length; i++) {
+    if (OFFERS[i].housingtype === housingTypeSelect.value) {
+      housingPriceInput.placeholder = OFFERS[i].minprice;
+      housingPriceInput.min = OFFERS[i].minprice;
+    }
+  }
+};
+
+housingTypeSelect.addEventListener('change', housingTypeInputFill);
+
+// Валидация полейц Время заезда и выезда
+
+var timeInSelect = document.querySelector('#timein');
+var timeOutSelect = document.querySelector('#timeout');
+
+var getTimeInOut = function (evt) {
+  if (evt.target === timeInSelect) {
+    timeOutSelect.value = timeInSelect.value;
+  } else {
+    timeInSelect.value = timeOutSelect.value;
+  }
+};
+
+timeInSelect.addEventListener('change', getTimeInOut);
+timeOutSelect.addEventListener('change', getTimeInOut);
