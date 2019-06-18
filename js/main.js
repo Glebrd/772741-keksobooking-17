@@ -93,7 +93,7 @@ var showMap = function () {
 // Вклюичение / Отключае формы
 var mapPin = document.querySelector('.map__pin--main');
 var form = document.querySelector('.ad-form');
-var toggleForm = function (formIsDisabled) {
+var changeFormState = function (formIsDisabled) {
   var fieldsets = form.getElementsByTagName('fieldset');
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].disabled = formIsDisabled;
@@ -107,7 +107,7 @@ var toggleForm = function (formIsDisabled) {
 };
 
 // Отключение формы
-toggleForm(DISABLE_FORM);
+changeFormState(DISABLE_FORM);
 
 // Заполние поля Адрес
 var mainPinY = mapPin.offsetTop;
@@ -122,7 +122,7 @@ fillAdressField(mainPinX, mainPinY);
 
 // Делаем страницу
 var enablePage = function () {
-  toggleForm(ENABLE_FORM);
+  changeFormState(ENABLE_FORM);
   showMap();
   mapPin.removeEventListener('mouseup', enablePage);
   fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
