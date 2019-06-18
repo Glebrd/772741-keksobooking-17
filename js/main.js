@@ -4,18 +4,14 @@
 var NUMBER_OF_ADVERTISEMENTS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
 
+
 // Создаём массив с типами предложений
 var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
-
-// Показываем блок .map, убрав в JS-коде у него класс.
-var map = document.querySelector('.map');
-var showMap = function () {
-  map.classList.remove('map--faded');
-};
-showMap();
 
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
@@ -65,5 +61,51 @@ var addToFragment = function (advertisements) {
   return fragment;
 };
 
-// Добавляем элементы из контейцнера на страницу
-similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+// Показываем блок .map, убрав в JS-коде у него класс.
+var map = document.querySelector('.map');
+var showMap = function () {
+  map.classList.remove('map--faded');
+  // Добавляем элементы из контейцнера на страницу
+  similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+};
+
+// Вклюичение / Отключае формы
+var mapPin = document.querySelector('.map__pin--main');
+var form = document.querySelector('.ad-form');
+var toggleForm = function (formIsDisabled) {
+  var fieldsets = form.getElementsByTagName('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = formIsDisabled;
+  }
+  // Ветка при отключении формы
+  if (formIsDisabled && !form.classList.contains('ad-form--disabled')) {
+    form.classList.add('ad-form--disabled');
+  } else if (!formIsDisabled) { // Ветка при включении формы
+    form.classList.remove('ad-form--disabled');
+  }
+};
+
+// Отключение формы
+toggleForm(true);
+
+// Заполние поля Адрес
+var mainPinY = mapPin.offsetTop;
+var mainPinX = mapPin.offsetLeft;
+var address = document.getElementById('address');
+
+var fillAdressField = function (X, Y) {
+  address.value = X + ', ' + Y;
+};
+
+fillAdressField(mainPinX, mainPinY);
+
+// Делаем страницу активной
+var enablePage = function () {
+  toggleForm(false);
+  showMap();
+  mapPin.removeEventListener('mouseup', enablePage);
+  fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
+};
+
+mapPin.addEventListener('mouseup', enablePage);
+
