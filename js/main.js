@@ -11,28 +11,12 @@ var PIN_MAX_Y = 630;
 var ENABLE_FORM = false;
 var DISABLE_FORM = true;
 
-var OFFERS = [
-  {
-    housingtype: 'palace',
-    minprice: 10000,
-  },
-  {
-    housingtype: 'flat',
-    minprice: 5000,
-  },
-  {
-    housingtype: 'house',
-    minprice: 1000,
-  },
-  {
-    housingtype: 'bungalo',
-    minprice: 0,
-  }
-];
-
-
-// Создаём массив с типами предложений
-// var OFFERS = ['palace', 'flat', 'house', 'bungalo'];
+var offers = {
+  palace: 10000,
+  flat: 5000,
+  house: 1000,
+  bungalo: 0
+};
 
 // Генерируем случайное число
 var generateRandomNumber = function (max) {
@@ -46,7 +30,7 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: OFFERS[generateRandomNumber(OFFERS.length)].housingtype},
+      offer: {type: offers[generateRandomNumber(offers.length)].housingtype},
       // Задаём расположение острого конца метки
       location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
@@ -136,28 +120,24 @@ var housingTypeSelect = document.querySelector('#type');
 var housingPriceInput = document.querySelector('#price');
 
 var housingTypeInputFill = function () {
-  for (var i = 0; i < OFFERS.length; i++) {
-    if (OFFERS[i].housingtype === housingTypeSelect.value) {
-      housingPriceInput.placeholder = OFFERS[i].minprice;
-      housingPriceInput.min = OFFERS[i].minprice;
-    }
-  }
+  housingPriceInput.min = offers[housingTypeSelect.value];
+  housingPriceInput.placeholder = offers[housingTypeSelect.value];
 };
 
 housingTypeSelect.addEventListener('change', housingTypeInputFill);
 
-// Валидация полейц Время заезда и выезда
+// Валидация полей Время заезда и выезда
 
 var timeInSelect = document.querySelector('#timein');
 var timeOutSelect = document.querySelector('#timeout');
 
-var getTimeInOut = function (evt) {
-  if (evt.target === timeInSelect) {
-    timeOutSelect.value = timeInSelect.value;
-  } else {
-    timeInSelect.value = timeOutSelect.value;
-  }
+var onTimeInSelect = function () {
+  timeOutSelect.value = timeInSelect.value;
 };
 
-timeInSelect.addEventListener('change', getTimeInOut);
-timeOutSelect.addEventListener('change', getTimeInOut);
+var onTimeOutSelect = function () {
+  timeInSelect.value = timeOutSelect.value;
+};
+
+timeInSelect.addEventListener('change', onTimeInSelect);
+timeOutSelect.addEventListener('change', onTimeOutSelect);
