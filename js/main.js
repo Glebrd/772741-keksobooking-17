@@ -143,13 +143,10 @@ var onTimeOutSelect = function () {
 timeInSelect.addEventListener('change', onTimeInSelect);
 timeOutSelect.addEventListener('change', onTimeOutSelect);
 
-//////////////////////////
-
-'use strict';
-// Перетаскивание диалога
-// var setupDialogElement = document.querySelector('.setup');
-// var setupAvatar = setupDialogElement.querySelector('.upload');
+// Перетаскивание пина
 var mapWidth = document.querySelector('.map__pins').offsetWidth;
+var addressX = null;
+var addressY = null;
 mapPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
@@ -172,24 +169,31 @@ mapPin.addEventListener('mousedown', function (evt) {
     };
 
     if ((mapPin.offsetLeft - shift.x) >= (mapWidth - MAIN_PIN_WIDTH / 2)) {
-      mapPin.style.left = (mapWidth - MAIN_PIN_WIDTH / 2) + 'px';
+      addressX = mapWidth - MAIN_PIN_WIDTH / 2;
+      mapPin.style.left = addressX + 'px';
     }
     else if ((mapPin.offsetLeft - shift.x) <= (-MAIN_PIN_WIDTH / 2)) {
-      mapPin.style.left = (-MAIN_PIN_WIDTH / 2) + 'px';
+      addressX = -MAIN_PIN_WIDTH / 2;
+      mapPin.style.left = addressX + 'px';
     }
     else {
-      mapPin.style.left = (mapPin.offsetLeft - shift.x) + 'px';
+      addressX = mapPin.offsetLeft - shift.x;
+      mapPin.style.left = addressX + 'px';
     }
     if ((mapPin.offsetTop - shift.y) >= PIN_MAX_Y) {
-      mapPin.style.top = PIN_MAX_Y + 'px';
+      addressY = PIN_MAX_Y;
+      mapPin.style.top = addressY + 'px';
     }
     else if ((mapPin.offsetTop - shift.y) <= PIN_MIN_Y) {
-      mapPin.style.top = PIN_MIN_Y + 'px';
+      addressY = PIN_MIN_Y;
+      mapPin.style.top = addressY + 'px';
     }
     else {
-    mapPin.style.top = (mapPin.offsetTop - shift.y) + 'px';}
+      addressY = mapPin.offsetTop - shift.y;
+      mapPin.style.top = addressY + 'px';
+    }
 
-
+    fillAdressField(addressX + MAIN_PIN_WIDTH / 2, addressY + PIN_HEIGHT);
   };
 
   var onMouseUp = function (upEvt) {
