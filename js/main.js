@@ -4,7 +4,7 @@
 var NUMBER_OF_ADVERTISEMENTS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_WIDTH = 65;
 var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
@@ -149,7 +149,7 @@ timeOutSelect.addEventListener('change', onTimeOutSelect);
 // Перетаскивание диалога
 // var setupDialogElement = document.querySelector('.setup');
 // var setupAvatar = setupDialogElement.querySelector('.upload');
-var MaximumMoveX = window.pinMaxX + PIN_WIDTH / 2;
+var mapWidth = document.querySelector('.map__pins').offsetWidth;
 mapPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
@@ -171,11 +171,11 @@ mapPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
-    if ((mapPin.offsetLeft - shift.x) >= window.pinMaxX) {
-      mapPin.style.left = window.pinMaxX + 'px';
+    if ((mapPin.offsetLeft - shift.x) >= (mapWidth - MAIN_PIN_WIDTH / 2)) {
+      mapPin.style.left = (mapWidth - MAIN_PIN_WIDTH / 2) + 'px';
     }
-    else if ((mapPin.offsetLeft - shift.x) <= (PIN_WIDTH / 2)) {
-      mapPin.style.left = (PIN_WIDTH / 2) + 'px';
+    else if ((mapPin.offsetLeft - shift.x) <= (-MAIN_PIN_WIDTH / 2)) {
+      mapPin.style.left = (-MAIN_PIN_WIDTH / 2) + 'px';
     }
     else {
       mapPin.style.left = (mapPin.offsetLeft - shift.x) + 'px';
