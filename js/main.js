@@ -30,10 +30,10 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   var offerKeys = Object.keys(offers);
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: { avatar: 'img/avatars/user0' + (i + 1) + '.png' },
-      offer: { type: offerKeys[generateRandomNumber(offerKeys.length)] },
+      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
+      offer: {type: offerKeys[generateRandomNumber(offerKeys.length)]},
       // Задаём расположение острого конца метки
-      location: { x: generateRandomNumber(window.pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT }
+      location: {x: generateRandomNumber(window.pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
   }
   return advertisements;
@@ -105,17 +105,6 @@ var fillAdressField = function (X, Y) {
 
 fillAdressField(mainPinX, mainPinY);
 
-// Делаем страницу
-var enablePage = function () {
-  changeFormState(ENABLE_FORM);
-  showMap();
-  mapPin.removeEventListener('mouseup', enablePage);
-  fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
-};
-
-mapPin.addEventListener('mouseup', enablePage);
-
-
 // Валидация полейц "Тип жилья" и "Цена за ночь"
 var housingTypeSelect = document.querySelector('#type');
 var housingPriceInput = document.querySelector('#price');
@@ -155,6 +144,7 @@ mapPin.addEventListener('mousedown', function (evt) {
     y: evt.clientY
   };
 
+
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
@@ -163,37 +153,42 @@ mapPin.addEventListener('mousedown', function (evt) {
       y: startCoordinates.y - moveEvt.clientY
     };
 
+    if ((map.classList.contains('map--faded')) && ((shift.x !== 0) || (shift.y !== 0))) {
+      changeFormState(ENABLE_FORM);
+      showMap();
+      // mapPin.removeEventListener('mouseup', window.enablePage);
+      // fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
+    }
+
     startCoordinates = {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
 
-    if ((mapPin.offsetLeft - shift.x) >= (mapWidth - MAIN_PIN_WIDTH / 2)) {
-      addressX = mapWidth - MAIN_PIN_WIDTH / 2;
-      mapPin.style.left = addressX + 'px';
-    }
-    else if ((mapPin.offsetLeft - shift.x) <= (-MAIN_PIN_WIDTH / 2)) {
-      addressX = -MAIN_PIN_WIDTH / 2;
-      mapPin.style.left = addressX + 'px';
-    }
-    else {
-      addressX = mapPin.offsetLeft - shift.x;
-      mapPin.style.left = addressX + 'px';
-    }
-    if ((mapPin.offsetTop - shift.y) >= PIN_MAX_Y) {
-      addressY = PIN_MAX_Y;
-      mapPin.style.top = addressY + 'px';
-    }
-    else if ((mapPin.offsetTop - shift.y) <= PIN_MIN_Y) {
-      addressY = PIN_MIN_Y;
-      mapPin.style.top = addressY + 'px';
-    }
-    else {
-      addressY = mapPin.offsetTop - shift.y;
-      mapPin.style.top = addressY + 'px';
-    }
+    if ((shift.x !== 0) || (shift.y !== 0)) {
+      if ((mapPin.offsetLeft - shift.x) >= (mapWidth - MAIN_PIN_WIDTH / 2)) {
+        addressX = mapWidth - MAIN_PIN_WIDTH / 2;
+        mapPin.style.left = addressX + 'px';
+      } else if ((mapPin.offsetLeft - shift.x) <= (-MAIN_PIN_WIDTH / 2)) {
+        addressX = -MAIN_PIN_WIDTH / 2;
+        mapPin.style.left = addressX + 'px';
+      } else {
+        addressX = mapPin.offsetLeft - shift.x;
+        mapPin.style.left = addressX + 'px';
+      }
+      if ((mapPin.offsetTop - shift.y) >= PIN_MAX_Y) {
+        addressY = PIN_MAX_Y;
+        mapPin.style.top = addressY + 'px';
+      } else if ((mapPin.offsetTop - shift.y) <= PIN_MIN_Y) {
+        addressY = PIN_MIN_Y;
+        mapPin.style.top = addressY + 'px';
+      } else {
+        addressY = mapPin.offsetTop - shift.y;
+        mapPin.style.top = addressY + 'px';
+      }
 
-    fillAdressField(addressX + MAIN_PIN_WIDTH / 2, addressY + PIN_HEIGHT);
+      fillAdressField(addressX + MAIN_PIN_WIDTH / 2, addressY + MAIN_PIN_HEIGHT);
+    }
   };
 
   var onMouseUp = function (upEvt) {
@@ -202,5 +197,10 @@ mapPin.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mouseup', onMouseUp);
   };
   document.addEventListener('mousemove', onMouseMove);
+
   document.addEventListener('mouseup', onMouseUp);
 });
+
+// Делаем страницу
+
+
