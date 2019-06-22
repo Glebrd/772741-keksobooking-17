@@ -25,15 +25,15 @@ var generateRandomNumber = function (max) {
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
 var generateAdvertisements = function (numberOfAdvertisements) {
-  var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
+  window.pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
   var offerKeys = Object.keys(offers);
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: offerKeys[generateRandomNumber(offerKeys.length)]},
+      author: { avatar: 'img/avatars/user0' + (i + 1) + '.png' },
+      offer: { type: offerKeys[generateRandomNumber(offerKeys.length)] },
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
+      location: { x: generateRandomNumber(window.pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT }
     };
   }
   return advertisements;
@@ -142,3 +142,61 @@ var onTimeOutSelect = function () {
 
 timeInSelect.addEventListener('change', onTimeInSelect);
 timeOutSelect.addEventListener('change', onTimeOutSelect);
+
+//////////////////////////
+
+'use strict';
+// Перетаскивание диалога
+// var setupDialogElement = document.querySelector('.setup');
+// var setupAvatar = setupDialogElement.querySelector('.upload');
+var MaximumMoveX = window.pinMaxX + PIN_WIDTH / 2;
+mapPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoordinates = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoordinates.x - moveEvt.clientX,
+      y: startCoordinates.y - moveEvt.clientY
+    };
+
+    startCoordinates = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    if ((mapPin.offsetLeft - shift.x) >= window.pinMaxX) {
+      mapPin.style.left = window.pinMaxX + 'px';
+    }
+    else if ((mapPin.offsetLeft - shift.x) <= (PIN_WIDTH / 2)) {
+      mapPin.style.left = (PIN_WIDTH / 2) + 'px';
+    }
+    else {
+      mapPin.style.left = (mapPin.offsetLeft - shift.x) + 'px';
+    }
+    if ((mapPin.offsetTop - shift.y) >= PIN_MAX_Y) {
+      mapPin.style.top = PIN_MAX_Y + 'px';
+    }
+    else if ((mapPin.offsetTop - shift.y) <= PIN_MIN_Y) {
+      mapPin.style.top = PIN_MIN_Y + 'px';
+    }
+    else {
+    mapPin.style.top = (mapPin.offsetTop - shift.y) + 'px';}
+
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
