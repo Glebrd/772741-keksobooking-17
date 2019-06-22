@@ -27,10 +27,11 @@ var generateRandomNumber = function (max) {
 var generateAdvertisements = function (numberOfAdvertisements) {
   var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
+  var offerKeys = Object.keys(offers);
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
       author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: offers[generateRandomNumber(offers.length)].housingtype},
+      offer: {type: offerKeys[generateRandomNumber(offerKeys.length)]},
       // Задаём расположение острого конца метки
       location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
