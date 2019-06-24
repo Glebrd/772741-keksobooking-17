@@ -25,7 +25,7 @@ var generateRandomNumber = function (max) {
 
 // Создаём массив, состоящий из 8 сгенерированных JS объектов
 var generateAdvertisements = function (numberOfAdvertisements) {
-  window.pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
+  var pinMaxX = document.querySelector('.map__pins').offsetWidth - PIN_WIDTH;
   var advertisements = [];
   var offerKeys = Object.keys(offers);
   for (var i = 0; i < numberOfAdvertisements; i++) {
@@ -33,7 +33,7 @@ var generateAdvertisements = function (numberOfAdvertisements) {
       author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
       offer: {type: offerKeys[generateRandomNumber(offerKeys.length)]},
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(window.pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
+      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
     };
   }
   return advertisements;
@@ -134,8 +134,6 @@ timeOutSelect.addEventListener('change', onTimeOutSelect);
 
 // Перетаскивание пина
 var mapWidth = document.querySelector('.map__pins').offsetWidth;
-var addressX = null;
-var addressY = null;
 mapPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
@@ -156,38 +154,22 @@ mapPin.addEventListener('mousedown', function (evt) {
     if ((map.classList.contains('map--faded')) && ((shift.x !== 0) || (shift.y !== 0))) {
       changeFormState(ENABLE_FORM);
       showMap();
-      // mapPin.removeEventListener('mouseup', window.enablePage);
-      // fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
     }
 
-    startCoordinates = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
-    };
+    var currentCoordinatesX = mapPin.offsetLeft - (shift.x);
+    var currentCoordinatesY = mapPin.offsetTop - (shift.y);
 
-    if ((shift.x !== 0) || (shift.y !== 0)) {
-      if ((mapPin.offsetLeft - shift.x) >= (mapWidth - MAIN_PIN_WIDTH / 2)) {
-        addressX = mapWidth - MAIN_PIN_WIDTH / 2;
-        mapPin.style.left = addressX + 'px';
-      } else if ((mapPin.offsetLeft - shift.x) <= (-MAIN_PIN_WIDTH / 2)) {
-        addressX = -MAIN_PIN_WIDTH / 2;
-        mapPin.style.left = addressX + 'px';
-      } else {
-        addressX = mapPin.offsetLeft - shift.x;
-        mapPin.style.left = addressX + 'px';
-      }
-      if ((mapPin.offsetTop - shift.y) >= PIN_MAX_Y) {
-        addressY = PIN_MAX_Y;
-        mapPin.style.top = addressY + 'px';
-      } else if ((mapPin.offsetTop - shift.y) <= PIN_MIN_Y) {
-        addressY = PIN_MIN_Y;
-        mapPin.style.top = addressY + 'px';
-      } else {
-        addressY = mapPin.offsetTop - shift.y;
-        mapPin.style.top = addressY + 'px';
-      }
-
-      fillAdressField(addressX + MAIN_PIN_WIDTH / 2, addressY + MAIN_PIN_HEIGHT);
+    if (currentCoordinatesX <= Math.ceil(mapWidth - MAIN_PIN_WIDTH / 2) &&
+      currentCoordinatesX >= (-MAIN_PIN_WIDTH / 2) &&
+      currentCoordinatesY <= PIN_MAX_Y &&
+      currentCoordinatesY >= PIN_MIN_Y) {
+      startCoordinates = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+      mapPin.style.top = currentCoordinatesY + 'px';
+      mapPin.style.left = currentCoordinatesX + 'px';
+      fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
     }
   };
 
@@ -200,7 +182,4 @@ mapPin.addEventListener('mousedown', function (evt) {
 
   document.addEventListener('mouseup', onMouseUp);
 });
-
-// Делаем страницу
-
 
