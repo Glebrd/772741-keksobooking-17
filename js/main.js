@@ -151,7 +151,7 @@ mapPin.addEventListener('mousedown', function (evt) {
       y: startCoordinates.y - moveEvt.clientY
     };
 
-    if ((map.classList.contains('map--faded')) && ((shift.x !== 0) || (shift.y !== 0))) {
+    if (map.classList.contains('map--faded')) {
       changeFormState(ENABLE_FORM);
       showMap();
     }
@@ -176,7 +176,6 @@ mapPin.addEventListener('mousedown', function (evt) {
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
   };
   document.addEventListener('mousemove', onMouseMove);
 
