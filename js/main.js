@@ -8,8 +8,6 @@ var MAIN_PIN_WIDTH = 65;
 var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
-var ENABLE_ELEMENT = false;
-var DISABLE_ELEMENT = true;
 
 var offers = {
   palace: 10000,
@@ -67,69 +65,55 @@ var addToFragment = function (advertisements) {
   return fragment;
 };
 
-
+// --Карта тоггл
 var map = document.querySelector('.map');
 
-// Показываем блок .map, убрав в JS-коде у него класс.
-var changeMapClass = function (mapIsDisabled) {
-  if (mapIsDisabled) {
-    map.classList.add('map--faded');
-  } else if (!mapIsDisabled) { // Ветка при включении формы
-    map.classList.remove('map--faded');
-  }
+// Карта тоггл класса map--faded
+var showMap = function () {
+  map.classList.remove('map--faded');
 };
 
-var switchPins = function (mapIsDisabled) {
-  if (mapIsDisabled) {
-    var rederedPins = similarListElement.querySelectorAll('.map__pin');
-    for (var i = 0; i < rederedPins.length; i++) {
-      if (!rederedPins[i].classList.contains('map__pin--main')) {
-        similarListElement.removeChild(rederedPins[i]);
-      }
-    }
-  } else {
-    similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
-  }
+// Карта добавить / убрать пины
+
+var addPinsToMap = function () {
+  similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
 };
 
-var changeMapState = function (mapIsDisabled) {
-  changeMapClass(mapIsDisabled);
-  switchPins(mapIsDisabled);
-};
+// var removePinsFromMap = function () {
+//   var rederedPins = similarListElement.querySelectorAll('.map__pin');
+//   for (var i = 0; i < rederedPins.length; i++) {
+//     if (!rederedPins[i].classList.contains('map__pin--main')) {
+//       similarListElement.removeChild(rederedPins[i]);
+//     }
+//   }
+// };
 
-// Вклюичение / Отключение формы формы
+// Отключение формы
 var form = document.querySelector('.ad-form');
-
-// Включаем / Отключаем поля формы
-var swithcFormFields = function (formIsDisabled) {
+var activateForm = function () {
+  // Отключаем поля
   var fieldsets = form.getElementsByTagName('fieldset');
   for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = formIsDisabled;
+    fieldsets[i].disabled = false;
   }
-};
-// Добавляем / убираем форме класс disabled
-var changeFormClass = function (formIsDisabled) {
-  if (formIsDisabled) {
-    form.classList.add('ad-form--disabled');
-  } else if (!formIsDisabled) { // Ветка при включении формы
-    form.classList.remove('ad-form--disabled');
-  }
+  // Убираем класс
+  form.classList.remove('ad-form--disabled');
 };
 
-// Отключаем форму полностью
-var changeFormState = function (formIsDisabled) {
-  swithcFormFields(formIsDisabled);
-  changeFormClass(formIsDisabled);
+// Включение формы
+var deactivateForm = function () {
+  // Включаем поля
+  var fieldsets = form.getElementsByTagName('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = true;
+  }
+  // Добавляем класс
+  form.classList.add('ad-form--disabled');
 };
 
-// Отключаем страницу
-var changePageState = function (formIsDisabled) {
-  changeFormState(formIsDisabled);
-  changeMapState(formIsDisabled);
-};
 
 // Выключили форму при открытии страницы
-changeFormState(DISABLE_ELEMENT);
+deactivateForm();
 
 // Заполние поля Адрес
 var mapPin = document.querySelector('.map__pin--main');
@@ -155,7 +139,6 @@ var housingTypeInputFill = function () {
 housingTypeSelect.addEventListener('change', housingTypeInputFill);
 
 // Валидация полей Время заезда и выезда
-
 var timeInSelect = document.querySelector('#timein');
 var timeOutSelect = document.querySelector('#timeout');
 
@@ -171,7 +154,6 @@ timeInSelect.addEventListener('change', onTimeInSelect);
 timeOutSelect.addEventListener('change', onTimeOutSelect);
 
 // Перетаскивание пина
-
 var mapWidth = document.querySelector('.map__pins').offsetWidth;
 
 mapPin.addEventListener('mousedown', function (evt) {
@@ -181,13 +163,14 @@ mapPin.addEventListener('mousedown', function (evt) {
     x: evt.clientX,
     y: evt.clientY
   };
-  // movePin(startCoordinates, evt);
 
   var onMouseMove = function (moveEvt) {
 
     moveEvt.preventDefault();
     if (map.classList.contains('map--faded')) {
-      changePageState(ENABLE_ELEMENT);
+      activateForm();
+      showMap();
+      addPinsToMap();
     }
     var shift = {
       x: startCoordinates.x - moveEvt.clientX,
@@ -215,7 +198,9 @@ mapPin.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
 
     if (map.classList.contains('map--faded')) {
-      changePageState(ENABLE_ELEMENT);
+      activateForm();
+      showMap();
+      addPinsToMap();
       var currentCoordinatesX = mapPin.offsetLeft;
       var currentCoordinatesY = mapPin.offsetTop;
       fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
