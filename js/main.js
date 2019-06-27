@@ -4,12 +4,10 @@
 var NUMBER_OF_ADVERTISEMENTS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_WIDTH = 65;
 var MAIN_PIN_HEIGHT = 84;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
-var ENABLE_FORM = false;
-var DISABLE_FORM = true;
 
 var offers = {
   palace: 10000,
@@ -67,34 +65,58 @@ var addToFragment = function (advertisements) {
   return fragment;
 };
 
-// Показываем блок .map, убрав в JS-коде у него класс.
+// --Карта тоггл
 var map = document.querySelector('.map');
+
+// Карта тоггл класса map--faded
 var showMap = function () {
   map.classList.remove('map--faded');
-  // Добавляем элементы из контейцнера на страницу
+};
+
+// Карта добавить / убрать пины
+
+var addPinsToMap = function () {
   similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
 };
 
-// Вклюичение / Отключае формы
-var mapPin = document.querySelector('.map__pin--main');
-var form = document.querySelector('.ad-form');
-var changeFormState = function (formIsDisabled) {
-  var fieldsets = form.getElementsByTagName('fieldset');
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = formIsDisabled;
-  }
-  // Ветка при отключении формы
-  if (!form.classList.contains('ad-form--disabled')) {
-    form.classList.add('ad-form--disabled');
-  } else if (!formIsDisabled) { // Ветка при включении формы
-    form.classList.remove('ad-form--disabled');
-  }
-};
+// var removePinsFromMap = function () {
+//   var rederedPins = similarListElement.querySelectorAll('.map__pin');
+//   for (var i = 0; i < rederedPins.length; i++) {
+//     if (!rederedPins[i].classList.contains('map__pin--main')) {
+//       similarListElement.removeChild(rederedPins[i]);
+//     }
+//   }
+// };
 
 // Отключение формы
-changeFormState(DISABLE_FORM);
+var form = document.querySelector('.ad-form');
+var activateForm = function () {
+  // Отключаем поля
+  var fieldsets = form.getElementsByTagName('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+  // Убираем класс
+  form.classList.remove('ad-form--disabled');
+};
+
+// Включение формы
+var deactivateForm = function () {
+  // Включаем поля
+  var fieldsets = form.getElementsByTagName('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = true;
+  }
+  // Добавляем класс
+  form.classList.add('ad-form--disabled');
+};
+
+
+// Выключили форму при открытии страницы
+deactivateForm();
 
 // Заполние поля Адрес
+var mapPin = document.querySelector('.map__pin--main');
 var mainPinY = mapPin.offsetTop;
 var mainPinX = mapPin.offsetLeft;
 var address = document.getElementById('address');
@@ -105,18 +127,7 @@ var fillAdressField = function (X, Y) {
 
 fillAdressField(mainPinX, mainPinY);
 
-// Делаем страницу
-var enablePage = function () {
-  changeFormState(ENABLE_FORM);
-  showMap();
-  mapPin.removeEventListener('mouseup', enablePage);
-  fillAdressField(mainPinX + MAIN_PIN_WIDTH / 2, mainPinY + MAIN_PIN_HEIGHT);
-};
-
-mapPin.addEventListener('mouseup', enablePage);
-
-
-// Валидация полейц "Тип жилья" и "Цена за ночь"
+// Валидация полей "Тип жилья" и "Цена за ночь"
 var housingTypeSelect = document.querySelector('#type');
 var housingPriceInput = document.querySelector('#price');
 
@@ -128,7 +139,6 @@ var housingTypeInputFill = function () {
 housingTypeSelect.addEventListener('change', housingTypeInputFill);
 
 // Валидация полей Время заезда и выезда
-
 var timeInSelect = document.querySelector('#timein');
 var timeOutSelect = document.querySelector('#timeout');
 
@@ -142,3 +152,63 @@ var onTimeOutSelect = function () {
 
 timeInSelect.addEventListener('change', onTimeInSelect);
 timeOutSelect.addEventListener('change', onTimeOutSelect);
+
+// Перетаскивание пина
+var mapWidth = document.querySelector('.map__pins').offsetWidth;
+
+mapPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoordinates = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+
+    moveEvt.preventDefault();
+    if (map.classList.contains('map--faded')) {
+      activateForm();
+      showMap();
+      addPinsToMap();
+    }
+    var shift = {
+      x: startCoordinates.x - moveEvt.clientX,
+      y: startCoordinates.y - moveEvt.clientY
+    };
+
+    var currentCoordinatesX = mapPin.offsetLeft - (shift.x);
+    var currentCoordinatesY = mapPin.offsetTop - (shift.y);
+
+    if (currentCoordinatesX <= Math.ceil(mapWidth - MAIN_PIN_WIDTH / 2) &&
+      currentCoordinatesX >= (-MAIN_PIN_WIDTH / 2) &&
+      currentCoordinatesY <= PIN_MAX_Y &&
+      currentCoordinatesY >= PIN_MIN_Y) {
+      startCoordinates = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+      mapPin.style.top = currentCoordinatesY + 'px';
+      mapPin.style.left = currentCoordinatesX + 'px';
+      fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    if (map.classList.contains('map--faded')) {
+      activateForm();
+      showMap();
+      addPinsToMap();
+      var currentCoordinatesX = mapPin.offsetLeft;
+      var currentCoordinatesY = mapPin.offsetTop;
+      fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
+    }
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+
+  document.addEventListener('mouseup', onMouseUp);
+});
