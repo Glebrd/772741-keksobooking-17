@@ -28,10 +28,10 @@ var generateAdvertisements = function (numberOfAdvertisements) {
   var offerKeys = Object.keys(offers);
   for (var i = 0; i < numberOfAdvertisements; i++) {
     advertisements[i] = {
-      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
-      offer: {type: offerKeys[generateRandomNumber(offerKeys.length)]},
+      author: { avatar: 'img/avatars/user0' + (i + 1) + '.png' },
+      offer: { type: offerKeys[generateRandomNumber(offerKeys.length)] },
       // Задаём расположение острого конца метки
-      location: {x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT}
+      location: { x: generateRandomNumber(pinMaxX) + PIN_WIDTH / 2, y: PIN_MIN_Y + generateRandomNumber(PIN_MAX_Y - PIN_MIN_Y) + PIN_HEIGHT }
     };
   }
   return advertisements;
@@ -78,15 +78,6 @@ var showMap = function () {
 var addPinsToMap = function () {
   similarListElement.appendChild(addToFragment(generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
 };
-
-// var removePinsFromMap = function () {
-//   var rederedPins = similarListElement.querySelectorAll('.map__pin');
-//   for (var i = 0; i < rederedPins.length; i++) {
-//     if (!rederedPins[i].classList.contains('map__pin--main')) {
-//       similarListElement.removeChild(rederedPins[i]);
-//     }
-//   }
-// };
 
 // Отключение формы
 var form = document.querySelector('.ad-form');
@@ -179,19 +170,19 @@ mapPin.addEventListener('mousedown', function (evt) {
 
     var currentCoordinatesX = mapPin.offsetLeft - (shift.x);
     var currentCoordinatesY = mapPin.offsetTop - (shift.y);
-
-    if (currentCoordinatesX <= Math.ceil(mapWidth - MAIN_PIN_WIDTH / 2) &&
-      currentCoordinatesX >= (-MAIN_PIN_WIDTH / 2) &&
-      currentCoordinatesY <= PIN_MAX_Y &&
-      currentCoordinatesY >= PIN_MIN_Y) {
-      startCoordinates = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-      mapPin.style.top = currentCoordinatesY + 'px';
-      mapPin.style.left = currentCoordinatesX + 'px';
-      fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
+    if (currentCoordinatesX <= Math.round(mapWidth - MAIN_PIN_WIDTH / 2)) {
+      if (currentCoordinatesX >= (-MAIN_PIN_WIDTH / 2)) {
+        startCoordinates.x = moveEvt.clientX;
+        mapPin.style.left = currentCoordinatesX + 'px';
+      }
     }
+    if (currentCoordinatesY <= PIN_MAX_Y) {
+      if (currentCoordinatesY >= PIN_MIN_Y) {
+        startCoordinates.y = moveEvt.clientY;
+        mapPin.style.top = currentCoordinatesY + 'px';
+      }
+    }
+    fillAdressField(parseInt(mapPin.style.left, 10) + Math.floor(MAIN_PIN_WIDTH / 2), (parseInt(mapPin.style.top, 10) + MAIN_PIN_HEIGHT));
   };
 
   var onMouseUp = function (upEvt) {
@@ -205,10 +196,10 @@ mapPin.addEventListener('mousedown', function (evt) {
       var currentCoordinatesY = mapPin.offsetTop;
       fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
     }
-    document.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
-  document.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mousemove', onMouseMove);
 
   document.addEventListener('mouseup', onMouseUp);
 });
