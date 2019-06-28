@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-  // Отключение формы
   var form = document.querySelector('.ad-form');
   window.advertisementForm = {
+    // Отключение формы
     activate: function () {
       var fieldsets = form.getElementsByTagName('fieldset');
       for (var i = 0; i < fieldsets.length; i++) {
@@ -10,22 +10,21 @@
       }
       // Убираем класс
       form.classList.remove('ad-form--disabled');
+    },
+    // Включение формы
+    deactivate: function () {
+      // Включаем поля
+      var fieldsets = form.getElementsByTagName('fieldset');
+      for (var i = 0; i < fieldsets.length; i++) {
+        fieldsets[i].disabled = true;
+      }
+      // Добавляем класс
+      form.classList.add('ad-form--disabled');
     }
   };
-  // Включение формы
-  var deactivateForm = function () {
-    // Включаем поля
-    var fieldsets = form.getElementsByTagName('fieldset');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = true;
-    }
-    // Добавляем класс
-    form.classList.add('ad-form--disabled');
-  };
-
 
   // Выключили форму при открытии страницы
-  deactivateForm();
+  window.advertisementForm.deactivate();
 
   // Заполние поля Адрес
   var mapPin = document.querySelector('.map__pin--main');
