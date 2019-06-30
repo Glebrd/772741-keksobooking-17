@@ -1,42 +1,39 @@
 'use strict';
 (function () {
-  var form = document.querySelector('.ad-form');
-  window.advertisementForm = {
+  var advertisementForm = document.querySelector('.ad-form');
+  window.form = {
     // Отключение формы
     activate: function () {
-      var fieldsets = form.getElementsByTagName('fieldset');
+      var fieldsets = advertisementForm.getElementsByTagName('fieldset');
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].disabled = false;
       }
       // Убираем класс
-      form.classList.remove('ad-form--disabled');
+      advertisementForm.classList.remove('ad-form--disabled');
     },
     // Включение формы
     deactivate: function () {
       // Включаем поля
-      var fieldsets = form.getElementsByTagName('fieldset');
+      var fieldsets = advertisementForm.getElementsByTagName('fieldset');
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].disabled = true;
       }
       // Добавляем класс
-      form.classList.add('ad-form--disabled');
+      advertisementForm.classList.add('ad-form--disabled');
+    },
+    fillAdressField: function (X, Y) {
+      address.value = X + ', ' + Y;
     }
   };
 
   // Выключили форму при открытии страницы
-  window.advertisementForm.deactivate();
+  window.form.deactivate();
 
   // Заполние поля Адрес
   var mapPin = document.querySelector('.map__pin--main');
   var mainPinY = mapPin.offsetTop;
   var mainPinX = mapPin.offsetLeft;
   var address = document.getElementById('address');
-
-  window.form = {
-    fillAdressField: function (X, Y) {
-      address.value = X + ', ' + Y;
-    }
-  };
 
   window.form.fillAdressField(mainPinX, mainPinY);
 
