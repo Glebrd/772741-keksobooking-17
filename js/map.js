@@ -63,10 +63,10 @@
     };
 
     var onMouseMove = function (moveEvt) {
-debugger;
       moveEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.form.activate();
+        window.form.setAvailability(window.util.ENABLE);
+        window.form.brighten();
         showMap();
         addPinsToMap();
       }
@@ -94,9 +94,9 @@ debugger;
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      debugger;
       if (map.classList.contains('map--faded')) {
-        window.form.activate();
+        window.form.setAvailability(window.util.ENABLE);
+        window.form.brighten();
         showMap();
         addPinsToMap();
         var currentCoordinatesX = mapPin.offsetLeft;
