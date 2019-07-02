@@ -12,7 +12,6 @@
     var errorButton = document.querySelector('.error__button');
     errorButton.addEventListener('click', function () {
       main.removeChild(newError);
-      window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', window.map.successHandler, window.error.create);
     });
   };
 
