@@ -66,7 +66,7 @@
   var resetMainPin = function () {
     mapPin.style.left = '570px';
     mapPin.style.top = '375px';
-  }
+  };
 
   // Добавляем элементы из контейцнера на страницу
   var successHandler = function (advertisements) {
