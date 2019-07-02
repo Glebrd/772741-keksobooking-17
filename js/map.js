@@ -63,6 +63,11 @@
     }
   };
 
+  var resetMainPin = function () {
+    mapPin.style.left = '570px';
+    mapPin.style.top = '375px';
+  }
+
   // Добавляем элементы из контейцнера на страницу
   var successHandler = function (advertisements) {
     window.data.advertisements = advertisements;
@@ -132,5 +137,9 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  window.map = {hideMap: hideMap, removePins: removePinsFromMap};
+  window.map = {
+    hideMap: hideMap,
+    removePins: removePinsFromMap,
+    resetMainPin: resetMainPin
+  };
 })();

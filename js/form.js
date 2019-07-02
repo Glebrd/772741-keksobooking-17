@@ -66,6 +66,7 @@
           window.form.fade();
           window.map.hideMap();
           window.map.removePins();
+          window.map.resetMainPin();
         }
         , window.error.create, new FormData(advertisementForm));
     evt.preventDefault();
