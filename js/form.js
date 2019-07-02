@@ -56,4 +56,18 @@
 
   timeInSelect.addEventListener('change', onTimeInSelect);
   timeOutSelect.addEventListener('change', onTimeOutSelect);
+
+  advertisementForm.addEventListener('submit', function (evt) {
+    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST',
+        function () {
+          advertisementForm.reset();
+          window.form.fillAdressField(mainPinX, mainPinY);
+          window.form.setAvailability(window.util.DISABLE);
+          window.form.fade();
+        }
+        , window.error.create, new FormData(advertisementForm));
+    evt.preventDefault();
+  });
+
+
 })();

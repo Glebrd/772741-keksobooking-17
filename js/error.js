@@ -1,16 +1,20 @@
 'use strict';
 (function () {
-  var createErrorMessage = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
+  // Находим шаблон ошибки
+  var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
+  var newError = errorTemplate.cloneNode(true);
+  var main = document.querySelector('main');
 
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+  var createError = function () {
+    main.appendChild(newError);
+    var errorButton = document.querySelector('.error__button');
+    errorButton.addEventListener('click', function () {
+      main.removeChild(newError);
+      window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', window.map.successHandler, window.error.create);
+    });
   };
 
-  window.error = {create: createErrorMessage};
+  window.error = {create: createError};
 })();

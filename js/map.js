@@ -7,7 +7,6 @@
   var PIN_MAX_Y = 630;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
-  var NUMBER_OF_ADVERTISEMENTS = 8;
 
   // Находим элемент в который будем вставлять новые элементы
   var similarListElement = document.querySelector('.map__pins');
@@ -32,7 +31,9 @@
   var addToFragment = function (advertisements) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < advertisements.length; i++) {
-      fragment.appendChild(renderPin(advertisements[i]));
+      if (advertisements[i].offer !== 0) {
+        fragment.appendChild(renderPin(advertisements[i]));
+      }
     }
     return fragment;
   };
@@ -51,11 +52,13 @@
     similarListElement.appendChild(addToFragment(window.data.advertisements));
   };
 
-   // Добавляем элементы из контейцнера на страницу
-   var successHandler = function (advertisements) {
+  // Добавляем элементы из контейцнера на страницу
+  var successHandler = function (advertisements) {
     window.data.advertisements = advertisements;
-    console.log(advertisements);
   };
+
+  window.map = {successHandler: successHandler};
+
   window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', successHandler, window.error.create);
 
   // Перетаскивание пина
