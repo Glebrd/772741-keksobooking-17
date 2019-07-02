@@ -48,8 +48,15 @@
   // Карта добавить пины
 
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.data.generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+    similarListElement.appendChild(addToFragment(window.data.advertisements));
   };
+
+   // Добавляем элементы из контейцнера на страницу
+   var successHandler = function (advertisements) {
+    window.data.advertisements = advertisements;
+    console.log(advertisements);
+  };
+  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', successHandler, window.error.create);
 
   // Перетаскивание пина
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
