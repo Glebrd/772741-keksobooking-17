@@ -46,10 +46,21 @@
     map.classList.remove('map--faded');
   };
 
+  var hideMap = function () {
+    map.classList.add('map--faded');
+  };
+
   // Карта добавить пины
 
   var addPinsToMap = function () {
     similarListElement.appendChild(addToFragment(window.data.advertisements));
+  };
+
+  var removePinsFromMap = function () {
+    var renderedPins = similarListElement.querySelectorAll('button:not(.map__pin--main)');
+    for (var i = 0; i < renderedPins.length; i++) {
+      similarListElement.removeChild(renderedPins[i]);
+    }
   };
 
   // Добавляем элементы из контейцнера на страницу
@@ -120,4 +131,6 @@
 
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.map = {hideMap: hideMap, removePins: removePinsFromMap};
 })();
