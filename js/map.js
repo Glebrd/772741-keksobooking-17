@@ -7,7 +7,6 @@
   var PIN_MAX_Y = 630;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
-  var NUMBER_OF_ADVERTISEMENTS = 8;
 
   // Находим элемент в который будем вставлять новые элементы
   var similarListElement = document.querySelector('.map__pins');
@@ -32,7 +31,9 @@
   var addToFragment = function (advertisements) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < advertisements.length; i++) {
-      fragment.appendChild(renderPin(advertisements[i]));
+      if (advertisements[i].offer !== 0) {
+        fragment.appendChild(renderPin(advertisements[i]));
+      }
     }
     return fragment;
   };
@@ -45,11 +46,36 @@
     map.classList.remove('map--faded');
   };
 
+  var hideMap = function () {
+    map.classList.add('map--faded');
+  };
+
   // Карта добавить пины
 
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.data.generateAdvertisements(NUMBER_OF_ADVERTISEMENTS)));
+    similarListElement.appendChild(addToFragment(window.data.advertisements));
   };
+
+  var removePinsFromMap = function () {
+    var renderedPins = similarListElement.querySelectorAll('button:not(.map__pin--main)');
+    for (var i = 0; i < renderedPins.length; i++) {
+      similarListElement.removeChild(renderedPins[i]);
+    }
+  };
+
+  var resetMainPin = function () {
+    mapPin.style.left = '570px';
+    mapPin.style.top = '375px';
+  };
+
+  // Добавляем элементы из контейцнера на страницу
+  var successHandler = function (advertisements) {
+    window.data.advertisements = advertisements;
+  };
+
+  window.map = {successHandler: successHandler};
+
+  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', successHandler, window.error.create);
 
   // Перетаскивание пина
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
@@ -63,10 +89,10 @@
     };
 
     var onMouseMove = function (moveEvt) {
-
       moveEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.advertisementForm.activate();
+        window.form.setAvailability(window.util.ENABLE);
+        window.form.brighten();
         showMap();
         addPinsToMap();
       }
@@ -94,9 +120,9 @@
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
       if (map.classList.contains('map--faded')) {
-        window.advertisementForm.activate();
+        window.form.setAvailability(window.util.ENABLE);
+        window.form.brighten();
         showMap();
         addPinsToMap();
         var currentCoordinatesX = mapPin.offsetLeft;
@@ -110,4 +136,10 @@
 
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.map = {
+    hideMap: hideMap,
+    removePins: removePinsFromMap,
+    resetMainPin: resetMainPin
+  };
 })();

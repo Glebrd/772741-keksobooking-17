@@ -1,42 +1,33 @@
 'use strict';
 (function () {
-  var form = document.querySelector('.ad-form');
-  window.advertisementForm = {
-    // Отключение формы
-    activate: function () {
-      var fieldsets = form.getElementsByTagName('fieldset');
+  var advertisementForm = document.querySelector('.ad-form');
+  window.form = {
+    // Включение формы / Отключение формы
+    setAvailability: function (enable) {
+      var fieldsets = advertisementForm.querySelectorAll('.ad-form__element, .ad-form-header');
       for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].disabled = false;
+        fieldsets[i].disabled = !enable;
       }
-      // Убираем класс
-      form.classList.remove('ad-form--disabled');
     },
-    // Включение формы
-    deactivate: function () {
-      // Включаем поля
-      var fieldsets = form.getElementsByTagName('fieldset');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].disabled = true;
-      }
-      // Добавляем класс
-      form.classList.add('ad-form--disabled');
+    fade: function () {
+      advertisementForm.classList.add('ad-form--disabled');
+    },
+    brighten: function () {
+      advertisementForm.classList.remove('ad-form--disabled');
+    },
+    fillAdressField: function (X, Y) {
+      address.value = X + ', ' + Y;
     }
   };
 
   // Выключили форму при открытии страницы
-  window.advertisementForm.deactivate();
+  window.form.setAvailability(window.util.DISABLE);
 
   // Заполние поля Адрес
   var mapPin = document.querySelector('.map__pin--main');
   var mainPinY = mapPin.offsetTop;
   var mainPinX = mapPin.offsetLeft;
   var address = document.getElementById('address');
-
-  window.form = {
-    fillAdressField: function (X, Y) {
-      address.value = X + ', ' + Y;
-    }
-  };
 
   window.form.fillAdressField(mainPinX, mainPinY);
 
@@ -65,4 +56,21 @@
 
   timeInSelect.addEventListener('change', onTimeInSelect);
   timeOutSelect.addEventListener('change', onTimeOutSelect);
+
+  advertisementForm.addEventListener('submit', function (evt) {
+    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST',
+        function () {
+          advertisementForm.reset();
+          window.form.fillAdressField(mainPinX, mainPinY);
+          window.form.setAvailability(window.util.DISABLE);
+          window.form.fade();
+          window.map.hideMap();
+          window.map.removePins();
+          window.map.resetMainPin();
+        }
+        , window.error.create, new FormData(advertisementForm));
+    evt.preventDefault();
+  });
+
+
 })();
