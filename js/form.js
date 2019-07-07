@@ -15,8 +15,8 @@
     brighten: function () {
       advertisementForm.classList.remove('ad-form--disabled');
     },
-    fillAdressField: function (X, Y) {
-      address.value = X + ', ' + Y;
+    fillAdressField: function (x, y) {
+      address.value = x + ', ' + y;
     }
   };
 
@@ -71,6 +71,4 @@
         , window.error.create, new FormData(advertisementForm));
     evt.preventDefault();
   });
-
-
 })();

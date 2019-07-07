@@ -7,6 +7,7 @@
   var PIN_MAX_Y = 630;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
+  var MAXIMUM_NUMBER_OF_PINS = 5;
 
   // Находим элемент в который будем вставлять новые элементы
   var similarListElement = document.querySelector('.map__pins');
@@ -30,10 +31,9 @@
   // Заполнили массив данных объявлений. Складываем новые элементы в контейцнер
   var addToFragment = function (advertisements) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < advertisements.length; i++) {
-      if (advertisements[i].offer !== 0) {
-        fragment.appendChild(renderPin(advertisements[i]));
-      }
+    var numberOfPins = advertisements.length > MAXIMUM_NUMBER_OF_PINS ? MAXIMUM_NUMBER_OF_PINS : advertisements.length;
+    for (var i = 0; i < numberOfPins; i++) {
+      fragment.appendChild(renderPin(advertisements[i]));
     }
     return fragment;
   };
@@ -51,9 +51,8 @@
   };
 
   // Карта добавить пины
-
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.data.advertisements));
+    similarListElement.appendChild(addToFragment(window.filter(window.data)));
   };
 
   var removePinsFromMap = function () {
@@ -69,13 +68,11 @@
   };
 
   // Добавляем элементы из контейцнера на страницу
-  var successHandler = function (advertisements) {
+  var saveData = function (advertisements) {
     window.data.advertisements = advertisements;
   };
 
-  window.map = {successHandler: successHandler};
-
-  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', successHandler, window.error.create);
+  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', saveData, window.error.create);
 
   // Перетаскивание пина
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
@@ -140,6 +137,7 @@
   window.map = {
     hideMap: hideMap,
     removePins: removePinsFromMap,
-    resetMainPin: resetMainPin
+    resetMainPin: resetMainPin,
+    addPins: addPinsToMap
   };
 })();
