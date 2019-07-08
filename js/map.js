@@ -72,7 +72,11 @@
     window.data.advertisements = advertisements;
   };
 
-  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', saveData, window.error.create);
+  var doOnLoad = function (advertisements) {
+    saveData(advertisements);
+    addPinsToMap();
+    window.card1.add();
+  };
 
   // Перетаскивание пина
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
@@ -91,7 +95,7 @@
         window.form.setAvailability(window.util.ENABLE);
         window.form.brighten();
         showMap();
-        addPinsToMap();
+        window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', doOnLoad, window.error.create);
       }
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
@@ -121,7 +125,7 @@
         window.form.setAvailability(window.util.ENABLE);
         window.form.brighten();
         showMap();
-        addPinsToMap();
+        window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', doOnLoad, window.error.create);
         var currentCoordinatesX = mapPin.offsetLeft;
         var currentCoordinatesY = mapPin.offsetTop;
         window.form.fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
