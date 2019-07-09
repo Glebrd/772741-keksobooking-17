@@ -13,7 +13,7 @@
 
   // Заполняем карточку объявления
   var fillCard = function () {
-    var currentData = window.filter(window.data);
+    var currentData = window.filter(window.data.getAdvertisements());
     cardElement.querySelector('.popup__title').innerHTML = currentData[0].offer.title;
     cardElement.querySelector('.popup__text--price').innerHTML = currentData[0].offer.price + '₽/ночь';
   };
@@ -29,5 +29,5 @@
     mapForInserting.insertBefore(renderCard(), mapFiltersContainer);
   };
 
-  window.card1 = {add: addCard, fill: fillCard};
+  window.card = {add: addCard, fill: fillCard};
 })();

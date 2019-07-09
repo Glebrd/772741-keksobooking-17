@@ -64,7 +64,7 @@
           window.form.fillAdressField(mainPinX, mainPinY);
           window.form.setAvailability(window.util.DISABLE);
           window.form.fade();
-          window.map.hideMap();
+          window.map.hide();
           window.map.removePins();
           window.map.resetMainPin();
         }

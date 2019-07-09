@@ -52,7 +52,7 @@
 
   // Карта добавить пины
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.filter(window.data)));
+    similarListElement.appendChild(addToFragment(window.filter(window.data.getAdvertisements())));
   };
 
   var removePinsFromMap = function () {
@@ -67,15 +67,10 @@
     mapPin.style.top = '375px';
   };
 
-  // Добавляем элементы из контейцнера на страницу
-  var saveData = function (advertisements) {
-    window.data.advertisements = advertisements;
-  };
-
   var doOnLoad = function (advertisements) {
-    saveData(advertisements);
+    window.data.saveAdvertisements(advertisements);
     addPinsToMap();
-    window.card1.add();
+    window.card.add();
   };
 
   // Перетаскивание пина
@@ -92,10 +87,8 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.form.setAvailability(window.util.ENABLE);
-        window.form.brighten();
+        window.page.enable();
         showMap();
-        window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', doOnLoad, window.error.create);
       }
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
@@ -122,10 +115,8 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.form.setAvailability(window.util.ENABLE);
-        window.form.brighten();
+        window.page.enable();
         showMap();
-        window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', doOnLoad, window.error.create);
         var currentCoordinatesX = mapPin.offsetLeft;
         var currentCoordinatesY = mapPin.offsetTop;
         window.form.fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
@@ -139,9 +130,11 @@
   });
 
   window.map = {
-    hideMap: hideMap,
+    hide: hideMap,
+    show: showMap,
     removePins: removePinsFromMap,
     resetMainPin: resetMainPin,
-    addPins: addPinsToMap
+    addPins: addPinsToMap,
+    doOnLoad: doOnLoad
   };
 })();

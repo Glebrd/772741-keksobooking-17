@@ -3,7 +3,7 @@
   var housingType = document.querySelector('.map__filter');
 
   var filter = function (data) {
-    var filtredData = data.advertisements.filter(function (item) {
+    var filtredData = data.filter(function (item) {
       return checkHousingType(item) && checkOffer(item);
     });
     return filtredData;

@@ -1,14 +1,28 @@
 'use strict';
 (function () {
 
-  window.data = {
-    offers: {
-      palace: 10000,
-      flat: 5000,
-      house: 1000,
-      bungalo: 0
-    }
+
+  // Добавляем элементы из контейцнера на страницу
+  var saveAdvertisements = function (advertisements) {
+    window.data.advertisements = advertisements;
   };
 
-  window.data = {advertisements: 0};
+  var getAdvertisements = function () {
+    return window.data.advertisements;
+  };
+
+
+  var offers = {
+    palace: 10000,
+    flat: 5000,
+    house: 1000,
+    bungalo: 0
+  };
+
+
+  window.data = {
+    saveAdvertisements: saveAdvertisements,
+    getAdvertisements: getAdvertisements,
+    offers: offers
+  };
 })();
