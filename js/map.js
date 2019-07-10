@@ -7,6 +7,7 @@
   var PIN_MAX_Y = 630;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
+  var MAXIMUM_NUMBER_OF_PINS = 5;
 
   // Находим элемент в который будем вставлять новые элементы
   var similarListElement = document.querySelector('.map__pins');
@@ -30,10 +31,9 @@
   // Заполнили массив данных объявлений. Складываем новые элементы в контейцнер
   var addToFragment = function (advertisements) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < advertisements.length; i++) {
-      if (advertisements[i].offer !== 0) {
-        fragment.appendChild(renderPin(advertisements[i]));
-      }
+    var numberOfPins = advertisements.length > MAXIMUM_NUMBER_OF_PINS ? MAXIMUM_NUMBER_OF_PINS : advertisements.length;
+    for (var i = 0; i < numberOfPins; i++) {
+      fragment.appendChild(renderPin(advertisements[i]));
     }
     return fragment;
   };
@@ -51,9 +51,8 @@
   };
 
   // Карта добавить пины
-
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.data.advertisements));
+    similarListElement.appendChild(addToFragment(window.filter(window.data.getAdvertisements())));
   };
 
   var removePinsFromMap = function () {
@@ -68,14 +67,11 @@
     mapPin.style.top = '375px';
   };
 
-  // Добавляем элементы из контейцнера на страницу
-  var successHandler = function (advertisements) {
-    window.data.advertisements = advertisements;
+  var doOnLoad = function (advertisements) {
+    window.data.saveAdvertisements(advertisements);
+    addPinsToMap();
+    window.card.add();
   };
-
-  window.map = {successHandler: successHandler};
-
-  window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', successHandler, window.error.create);
 
   // Перетаскивание пина
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
@@ -91,10 +87,8 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.form.setAvailability(window.util.ENABLE);
-        window.form.brighten();
+        window.page.enable();
         showMap();
-        addPinsToMap();
       }
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
@@ -121,10 +115,8 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (map.classList.contains('map--faded')) {
-        window.form.setAvailability(window.util.ENABLE);
-        window.form.brighten();
+        window.page.enable();
         showMap();
-        addPinsToMap();
         var currentCoordinatesX = mapPin.offsetLeft;
         var currentCoordinatesY = mapPin.offsetTop;
         window.form.fillAdressField(currentCoordinatesX + Math.floor(MAIN_PIN_WIDTH / 2), currentCoordinatesY + MAIN_PIN_HEIGHT);
@@ -138,8 +130,11 @@
   });
 
   window.map = {
-    hideMap: hideMap,
+    hide: hideMap,
+    show: showMap,
     removePins: removePinsFromMap,
-    resetMainPin: resetMainPin
+    resetMainPin: resetMainPin,
+    addPins: addPinsToMap,
+    doOnLoad: doOnLoad
   };
 })();

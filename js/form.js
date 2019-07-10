@@ -15,8 +15,8 @@
     brighten: function () {
       advertisementForm.classList.remove('ad-form--disabled');
     },
-    fillAdressField: function (X, Y) {
-      address.value = X + ', ' + Y;
+    fillAdressField: function (x, y) {
+      address.value = x + ', ' + y;
     }
   };
 
@@ -64,13 +64,11 @@
           window.form.fillAdressField(mainPinX, mainPinY);
           window.form.setAvailability(window.util.DISABLE);
           window.form.fade();
-          window.map.hideMap();
+          window.map.hide();
           window.map.removePins();
           window.map.resetMainPin();
         }
         , window.error.create, new FormData(advertisementForm));
     evt.preventDefault();
   });
-
-
 })();
