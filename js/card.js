@@ -9,7 +9,6 @@
   var mapFiltersContainer = document.querySelector('.map__filters-container');
   var mapForInserting = document.querySelector('.map');
 
-  var cardElement = 0;
 
   // Массовая установка атрибутов элементу
   function setAttributes(element, attributes) {
@@ -21,7 +20,7 @@
   }
 
   // Заполняем удобства
-  var addFeatures = function (currentAdvertisement) {
+  var addFeatures = function (currentAdvertisement, cardElement) {
     var features = cardElement.querySelector('.popup__features');
     features.innerHTML = '';
     for (var i = 0; i < currentAdvertisement.offer.features.length; i++) {
@@ -32,7 +31,7 @@
   };
 
   // Заполняем фото
-  var addPhotos = function (currentAdvertisement) {
+  var addPhotos = function (currentAdvertisement, cardElement) {
     var photos = cardElement.querySelector('.popup__photos');
     photos.innerHTML = '';
     for (var i = 0; i < currentAdvertisement.offer.photos.length; i++) {
@@ -43,8 +42,9 @@
     }
   };
 
-  // Заполняем карточку объявления
-  var fillCard = function (currentAdvertisement) {
+  // Клонируем шабло
+  var renderCard = function (currentAdvertisement) {
+    var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').innerHTML = currentAdvertisement.offer.title;
     cardElement.querySelector('.popup__text--address').innerHTML = currentAdvertisement.offer.address;
     cardElement.querySelector('.popup__text--price').innerHTML = currentAdvertisement.offer.price + '₽/ночь';
@@ -53,20 +53,28 @@
     cardElement.querySelector('.popup__description').innerHTML = currentAdvertisement.offer.description;
     cardElement.querySelector('.popup__avatar').src = currentAdvertisement.author.avatar;
     cardElement.querySelector('.popup__type').innerHTML = window.data.housingType[currentAdvertisement.offer.type].name;
-    addFeatures(currentAdvertisement);
-    addPhotos(currentAdvertisement);
-  };
-
-  // Клонируем шаблон
-  var renderCard = function () {
-    cardElement = cardTemplate.cloneNode(true);
-    fillCard(window.filter(window.data.get())[0]);
+    addFeatures(currentAdvertisement, cardElement);
+    addPhotos(currentAdvertisement, cardElement);
     return cardElement;
   };
 
-  var addCard = function () {
-    mapForInserting.insertBefore(renderCard(), mapFiltersContainer);
+  // Добавляем карточку на страницу
+  var addCard = function (elementToAdd) {
+    mapForInserting.insertBefore(elementToAdd, mapFiltersContainer);
   };
 
-  window.card = {add: addCard, fill: fillCard};
+  var createNewCard = function (currentAdvertisement) {
+    if (currentAdvertisement) {
+      addCard(renderCard(currentAdvertisement));
+    }
+  };
+
+  var removeCard = function () {
+    var cardToDelete = document.querySelector('.map__card');
+    if (cardToDelete) {
+      cardToDelete.remove();
+    }
+  };
+
+  window.card = {add: createNewCard, remove: removeCard};
 })();

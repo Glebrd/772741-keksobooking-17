@@ -70,7 +70,7 @@
   var doOnLoad = function (advertisements) {
     window.data.save(advertisements);
     addPinsToMap();
-    window.card.add();
+    window.card.add(window.data.get()[0]);
   };
 
   // Перетаскивание пина
