@@ -52,7 +52,7 @@
 
   // Карта добавить пины
   var addPinsToMap = function () {
-    similarListElement.appendChild(addToFragment(window.filter(window.data.getAdvertisements())));
+    similarListElement.appendChild(addToFragment(window.filter(window.data.get())));
   };
 
   var removePinsFromMap = function () {
@@ -68,9 +68,9 @@
   };
 
   var doOnLoad = function (advertisements) {
-    window.data.saveAdvertisements(advertisements);
+    window.data.save(advertisements);
     addPinsToMap();
-    window.card.add();
+    window.card.add(window.data.get()[0]);
   };
 
   // Перетаскивание пина

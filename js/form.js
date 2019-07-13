@@ -36,8 +36,8 @@
   var housingPriceInput = document.querySelector('#price');
 
   var housingTypeInputFill = function () {
-    housingPriceInput.min = window.data.offers[housingTypeSelect.value];
-    housingPriceInput.placeholder = window.data.offers[housingTypeSelect.value];
+    housingPriceInput.min = window.data.housingType[housingTypeSelect.value].price;
+    housingPriceInput.placeholder = window.data.housingType[housingTypeSelect.value].price;
   };
 
   housingTypeSelect.addEventListener('change', housingTypeInputFill);

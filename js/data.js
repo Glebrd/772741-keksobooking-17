@@ -12,17 +12,17 @@
   };
 
 
-  var offers = {
-    palace: 10000,
-    flat: 5000,
-    house: 1000,
-    bungalo: 0
+  var housingType = {
+    palace: {price: 10000, name: 'Дворец'},
+    flat: {price: 5000, name: 'Квартира'},
+    house: {price: 100, name: 'Дом'},
+    bungalo: {price: 0, name: 'Бунгало'}
   };
 
 
   window.data = {
-    saveAdvertisements: saveAdvertisements,
-    getAdvertisements: getAdvertisements,
-    offers: offers
+    save: saveAdvertisements,
+    get: getAdvertisements,
+    housingType: housingType
   };
 })();
