@@ -24,6 +24,10 @@
     pinElement.style = 'left: ' + (advertisement.location.x - PIN_WIDTH / 2) + 'px; top: ' + (advertisement.location.y - PIN_HEIGHT) + 'px';
     pinElement.querySelector('img').src = advertisement.author.avatar;
     pinElement.querySelector('img').alt = ' ';
+    pinElement.addEventListener('click', function () {
+      window.card.remove(pinElement);
+      window.card.add(advertisement);
+    });
     return pinElement;
   };
 

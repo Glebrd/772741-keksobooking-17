@@ -55,7 +55,17 @@
     cardElement.querySelector('.popup__type').innerHTML = window.data.housingType[currentAdvertisement.offer.type].name;
     addFeatures(currentAdvertisement, cardElement);
     addPhotos(currentAdvertisement, cardElement);
+    cardElement.querySelector('.popup__close').addEventListener('click', onButtonCloseClick);
+    document.addEventListener('keydown', onButtonEscPress);
     return cardElement;
+  };
+
+  var onButtonCloseClick = function () {
+    removeCard();
+  };
+
+  var onButtonEscPress = function (evt) {
+    window.util.isEscKey(evt, removeCard);
   };
 
   // Добавляем карточку на страницу
