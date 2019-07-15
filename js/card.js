@@ -70,21 +70,22 @@
     }
   };
 
-  var removeCard = function (evt) {
-    var openedCard = document.querySelector('.map__card');
+  var deactivatePin = function () {
     var activePin = document.querySelector('.map__pin--active');
-    // Если карточка объявления открыта
-    if (openedCard) {
-      // Если это не клик на пин ИЛИ это клик на пин, по которому ещё не открыто объявление
-      if (!evt || !(evt.currentTarget.classList.contains('map__pin--active'))) {
-        openedCard.remove();
-        // Если есть активный пин
-        if (activePin) {
-          activePin.classList.remove('map__pin--active');
-        }
-      }
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
     }
   };
 
-  window.card = { add: createNewCard, remove: removeCard };
+  var removeCard = function () {
+    var openedCard = document.querySelector('.map__card');
+
+    if (!openedCard) {
+      return;
+    }
+    openedCard.remove();
+    deactivatePin();
+  };
+
+  window.card = {add: createNewCard, remove: removeCard};
 })();

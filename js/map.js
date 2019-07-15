@@ -25,7 +25,7 @@
     pinElement.querySelector('img').src = advertisement.author.avatar;
     pinElement.querySelector('img').alt = ' ';
     pinElement.addEventListener('click', function (evt) {
-      window.card.remove(evt);
+      window.card.remove();
       window.card.add(advertisement, evt);
     });
     return pinElement;
