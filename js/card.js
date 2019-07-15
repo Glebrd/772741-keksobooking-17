@@ -80,7 +80,7 @@
   };
 
   var removeCard = function (evt) {
-    if (evt !== 'indefined' && (document.querySelector('.map__card'))) {
+    if (!evt && (document.querySelector('.map__card'))) {
       document.querySelector('.map__card').remove();
     } else if (document.querySelector('.map__card') && !(evt.currentTarget.classList.contains('map__pin--active'))) {
       if (document.querySelector('.map__pin--active')) {
