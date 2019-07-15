@@ -52,26 +52,17 @@
   };
 
   var onButtonCloseClick = function () {
-    if (document.querySelector('.map__card')) {
-      document.querySelector('.map__card').remove();
-      document.querySelector('.map__pin--active').classList.remove('map__pin--active');
-    }
+    removeCard();
   };
 
   var onButtonEscPress = function (evt) {
-    if (document.querySelector('.map__card')) {
-      window.util.isEscKey(evt, function () {
-        document.querySelector('.map__card').remove();
-      });
-      document.querySelector('.map__pin--active').classList.remove('map__pin--active');
-    }
+    window.util.isEscKey(evt, removeCard);
   };
 
   // Добавляем карточку на страницу
   var addCard = function (cardToAdd) {
     mapForInserting.insertBefore(cardToAdd, mapFiltersContainer);
   };
-
   var createNewCard = function (currentAdvertisement, evt) {
     if (currentAdvertisement && !(evt.currentTarget.classList.contains('map__pin--active'))) {
       evt.currentTarget.classList.add('map__pin--active');
@@ -80,16 +71,20 @@
   };
 
   var removeCard = function (evt) {
-    if (!evt && (document.querySelector('.map__card'))) {
-      document.querySelector('.map__card').remove();
-    } else if (document.querySelector('.map__card') && !(evt.currentTarget.classList.contains('map__pin--active'))) {
-      if (document.querySelector('.map__pin--active')) {
-        document.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    var openedCard = document.querySelector('.map__card');
+    var activePin = document.querySelector('.map__pin--active');
+    // Если карточка объявления открыта
+    if (openedCard) {
+      // Если это не клик на пин ИЛИ это клик на пин, по которому ещё не открыто объявление
+      if (!evt || !(evt.currentTarget.classList.contains('map__pin--active'))) {
+        openedCard.remove();
+        // Если есть активный пин
+        if (activePin) {
+          activePin.classList.remove('map__pin--active');
+        }
       }
-      document.querySelector('.map__card').remove();
     }
   };
 
-
-  window.card = {add: createNewCard, remove: removeCard};
+  window.card = { add: createNewCard, remove: removeCard };
 })();
