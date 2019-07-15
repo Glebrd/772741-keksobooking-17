@@ -18,15 +18,15 @@
     .querySelector('.map__pin');
 
   // Клонируем шаблон и заполняем данными пина
-  var renderPin = function (advertisement, currentIndex) {
+  var renderPin = function (advertisement) {
     var pinElement = pinTemplate.cloneNode(true);
     // Задаём расположение левого верхнего угла метки
     pinElement.style = 'left: ' + (advertisement.location.x - PIN_WIDTH / 2) + 'px; top: ' + (advertisement.location.y - PIN_HEIGHT) + 'px';
     pinElement.querySelector('img').src = advertisement.author.avatar;
     pinElement.querySelector('img').alt = ' ';
-    pinElement.addEventListener('click', function () {
-      window.card.remove(currentIndex);
-      window.card.add(advertisement, currentIndex);
+    pinElement.addEventListener('click', function (evt) {
+      window.card.remove(evt);
+      window.card.add(advertisement, evt);
     });
     return pinElement;
   };
