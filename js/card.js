@@ -64,16 +64,9 @@
     mapForInserting.insertBefore(cardToAdd, mapFiltersContainer);
   };
   var createNewCard = function (currentAdvertisement, evt) {
-    if (currentAdvertisement && !(evt.currentTarget.classList.contains('map__pin--active'))) {
-      evt.currentTarget.classList.add('map__pin--active');
+    if (currentAdvertisement) {
+      window.map.activatePin(evt.currentTarget);
       addCard(renderCard(currentAdvertisement));
-    }
-  };
-
-  var deactivatePin = function () {
-    var activePin = document.querySelector('.map__pin--active');
-    if (activePin) {
-      activePin.classList.remove('map__pin--active');
     }
   };
 
@@ -84,7 +77,7 @@
       return;
     }
     openedCard.remove();
-    deactivatePin();
+    window.map.deactivatePin();
   };
 
   window.card = {add: createNewCard, remove: removeCard};

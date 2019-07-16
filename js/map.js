@@ -25,8 +25,10 @@
     pinElement.querySelector('img').src = advertisement.author.avatar;
     pinElement.querySelector('img').alt = ' ';
     pinElement.addEventListener('click', function (evt) {
-      window.card.remove();
-      window.card.add(advertisement, evt);
+      if (!checkIfPinIsActive(evt.currentTarget)) {
+        window.card.remove();
+        window.card.add(advertisement, evt);
+      }
     });
     return pinElement;
   };
@@ -132,12 +134,30 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var deactivatePin = function () {
+    var activePin = document.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
+  };
+
+  var activatePin = function (pin) {
+    pin.classList.add('map__pin--active');
+  };
+
+
+  var checkIfPinIsActive = function (pin) {
+    return pin.classList.contains('map__pin--active');
+  };
+
   window.map = {
     hide: hideMap,
     show: showMap,
     removePins: removePinsFromMap,
     resetMainPin: resetMainPin,
     addPins: addPinsToMap,
+    deactivatePin: deactivatePin,
+    activatePin: activatePin,
     doOnLoad: doOnLoad
   };
 })();
