@@ -28,7 +28,8 @@
       var photo = document.createElement('img');
       photo.classList.add('popup__photo');
       photo.src = currentAdvertisement.offer.photos[i];
-      photo.style = 'height: 40px; width: 45px';
+      photo.style.height = '40px';
+      photo.style.width = '45px';
       photo.alt = 'Фотография жилья';
       photos.appendChild(photo);
     }
@@ -63,21 +64,18 @@
   var addCard = function (cardToAdd) {
     mapForInserting.insertBefore(cardToAdd, mapFiltersContainer);
   };
-  var createNewCard = function (currentAdvertisement, evt) {
+  var createNewCard = function (currentAdvertisement) {
     if (currentAdvertisement) {
-      window.map.activatePin(evt.currentTarget);
       addCard(renderCard(currentAdvertisement));
     }
   };
 
   var removeCard = function () {
     var openedCard = document.querySelector('.map__card');
-
-    if (!openedCard) {
-      return;
+    if (openedCard) {
+      openedCard.remove();
+      window.map.deactivatePin();
     }
-    openedCard.remove();
-    window.map.deactivatePin();
   };
 
   window.card = {add: createNewCard, remove: removeCard};

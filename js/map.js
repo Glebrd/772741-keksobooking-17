@@ -28,6 +28,7 @@
       if (!checkIfPinIsActive(evt.currentTarget)) {
         window.card.remove();
         window.card.add(advertisement, evt);
+        window.map.activatePin(evt.currentTarget);
       }
     });
     return pinElement;
@@ -39,7 +40,7 @@
     var fragment = document.createDocumentFragment();
     var numberOfPins = advertisements.length > MAXIMUM_NUMBER_OF_PINS ? MAXIMUM_NUMBER_OF_PINS : advertisements.length;
     for (var i = 0; i < numberOfPins; i++) {
-      fragment.appendChild(renderPin(advertisements[i], i));
+      fragment.appendChild(renderPin(advertisements[i]));
     }
     return fragment;
   };
