@@ -27,8 +27,8 @@
     pinElement.addEventListener('click', function (evt) {
       if (!checkIfPinIsActive(evt.currentTarget)) {
         window.card.remove();
-        window.card.add(advertisement, evt);
-        window.map.activatePin(evt.currentTarget);
+        window.card.add(advertisement);
+        window.map.activatePin(pinElement);
       }
     });
     return pinElement;
