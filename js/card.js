@@ -9,16 +9,6 @@
   var mapFiltersContainer = document.querySelector('.map__filters-container');
   var mapForInserting = document.querySelector('.map');
 
-
-  // Массовая установка атрибутов элементу
-  function setAttributes(element, attributes) {
-    for (var key in attributes) {
-      if (attributes.hasOwnProperty(key)) {
-        element.setAttribute(key, attributes[key]);
-      }
-    }
-  }
-
   // Заполняем удобства
   var addFeatures = function (currentAdvertisement, cardElement) {
     var features = cardElement.querySelector('.popup__features');
@@ -37,12 +27,14 @@
     for (var i = 0; i < currentAdvertisement.offer.photos.length; i++) {
       var photo = document.createElement('img');
       photo.classList.add('popup__photo');
-      setAttributes(photo, {'src': currentAdvertisement.offer.photos[i], 'height': '40px', 'width': '45px', 'alt': 'Фотография жилья'});
+      photo.src = currentAdvertisement.offer.photos[i];
+      photo.style.height = '40px';
+      photo.style.width = '45px';
+      photo.alt = 'Фотография жилья';
       photos.appendChild(photo);
     }
   };
 
-  // Клонируем шабло
   var renderCard = function (currentAdvertisement) {
     var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').innerHTML = currentAdvertisement.offer.title;
@@ -55,14 +47,23 @@
     cardElement.querySelector('.popup__type').innerHTML = window.data.housingType[currentAdvertisement.offer.type].name;
     addFeatures(currentAdvertisement, cardElement);
     addPhotos(currentAdvertisement, cardElement);
+    cardElement.querySelector('.popup__close').addEventListener('click', onButtonCloseClick);
+    document.addEventListener('keydown', onButtonEscPress);
     return cardElement;
   };
 
-  // Добавляем карточку на страницу
-  var addCard = function (elementToAdd) {
-    mapForInserting.insertBefore(elementToAdd, mapFiltersContainer);
+  var onButtonCloseClick = function () {
+    removeCard();
   };
 
+  var onButtonEscPress = function (evt) {
+    window.util.isEscKey(evt, removeCard);
+  };
+
+  // Добавляем карточку на страницу
+  var addCard = function (cardToAdd) {
+    mapForInserting.insertBefore(cardToAdd, mapFiltersContainer);
+  };
   var createNewCard = function (currentAdvertisement) {
     if (currentAdvertisement) {
       addCard(renderCard(currentAdvertisement));
@@ -70,9 +71,10 @@
   };
 
   var removeCard = function () {
-    var cardToDelete = document.querySelector('.map__card');
-    if (cardToDelete) {
-      cardToDelete.remove();
+    var openedCard = document.querySelector('.map__card');
+    if (openedCard) {
+      openedCard.remove();
+      window.map.deactivatePin();
     }
   };
 
