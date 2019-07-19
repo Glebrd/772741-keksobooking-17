@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var exhange = function (url, method, onLoad, onError, data) {
+  var exсhange = function (url, method, onLoad, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -25,7 +25,7 @@
   };
 
   window.backend = {
-    exchange: exhange
+    exchange: exсhange
   };
 
 })();
