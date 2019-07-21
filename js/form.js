@@ -76,13 +76,9 @@
   // Для случаев, когда пользователь сначала выбирает количество комнат.
   var onRoomNumberChange = function () {
     var guests = roomCapacity[roomNumber.value];
-    capacity.value = guests[0];
+    capacity.querySelector('[value="' + guests[0] + '"]').selected = true;
     for (var i = 0; i < capacity.options.length; i++) {
-      if (guests.includes(capacity.options[i].value)) {
-        capacity.options[i].disabled = false;
-      } else {
-        capacity.options[i].disabled = true;
-      }
+      capacity.options[i].disabled = !guests.includes(capacity.options[i].value);
     }
   };
 
