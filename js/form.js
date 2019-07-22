@@ -58,17 +58,47 @@
   timeOutSelect.addEventListener('change', onTimeOutSelect);
 
   advertisementForm.addEventListener('submit', function (evt) {
-    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST',
-        function () {
-          advertisementForm.reset();
-          window.form.fillAdressField(mainPinX, mainPinY);
-          window.form.setAvailability(window.util.DISABLE);
-          window.form.fade();
-          window.map.hide();
-          window.map.removePins();
-          window.map.resetMainPin();
-        }
-        , window.error.create, new FormData(advertisementForm));
     evt.preventDefault();
+    window.page.disable(advertisementForm, mainPinX, mainPinY);
   });
+
+  var roomCapacity = {
+    1: ['1'],
+    2: ['2', '1'],
+    3: ['3', '2', '1'],
+    100: ['0']
+  };
+
+  var roomNumber = document.querySelector('#room_number');
+  var capacity = document.querySelector('#capacity');
+
+  // Запрещаем выбор количества мест (отключаем опцию), если оно не соответствует количеству комнат
+  // Для случаев, когда пользователь сначала выбирает количество комнат.
+  var onRoomNumberChange = function () {
+    var guests = roomCapacity[roomNumber.value];
+    capacity.querySelector('[value="' + guests[0] + '"]').selected = true;
+    for (var i = 0; i < capacity.options.length; i++) {
+      capacity.options[i].disabled = !guests.includes(capacity.options[i].value);
+    }
+  };
+
+  roomNumber.addEventListener('change', onRoomNumberChange);
+
+  // Запрещаем отправлять форму, если было выбрано количество мест, не соответствующще количеству комнат.
+  // Для случаев, когда пользователь сначала выбирает количество мест.
+  var setCapacityValidity = function () {
+    if (!roomCapacity[roomNumber.value].includes(capacity.value)) {
+      capacity.setCustomValidity('Количество гостей не соответствует количеству комнат');
+    } else {
+      capacity.setCustomValidity('');
+    }
+  };
+
+  var onCapacityChange = function () {
+    setCapacityValidity();
+  };
+
+  setCapacityValidity();
+  capacity.addEventListener('change', onCapacityChange);
+
 })();
