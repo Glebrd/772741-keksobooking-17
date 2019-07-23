@@ -4,7 +4,7 @@
     window.form.setAvailability(window.util.ENABLE);
     window.form.brighten();
 
-    window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', window.map.doOnLoad, window.error.create);
+    window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', window.map.doOnLoad, window.modal.error);
   };
 
   var disablePage = function (advertisementForm, mainPinX, mainPinY) {
@@ -17,9 +17,9 @@
           window.map.hide();
           window.map.removePins();
           window.map.resetMainPin();
-          window.error.createSuccess();
+          window.modal.success();
         }
-        , window.error.create, new FormData(advertisementForm));
+        , window.modal.error, new FormData(advertisementForm));
   };
 
   window.page = {enable: enablePage, disable: disablePage};

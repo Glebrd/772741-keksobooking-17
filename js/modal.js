@@ -26,23 +26,23 @@
   var errorTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
-  var newError = errorTemplate.cloneNode(true);
+  var newErrorPopup = errorTemplate.cloneNode(true);
   var main = document.querySelector('main');
 
-  var createError = function (message) {
-    newError.querySelector('p').textContent = message;
-    addModal(newError);
+  var createErrorPopup = function (message) {
+    newErrorPopup.querySelector('p').textContent = message;
+    addModal(newErrorPopup);
   };
 
   // Находим шаблон сообщение об успехе
   var successTemplate = document.querySelector('#success')
     .content
     .querySelector('.success');
-  var newSuccess = successTemplate.cloneNode(true);
+  var newSuccessPopup = successTemplate.cloneNode(true);
 
-  var createSuccess = function () {
-    addModal(newSuccess);
+  var createSuccessPopup = function () {
+    addModal(newSuccessPopup);
   };
 
-  window.error = {create: createError, createSuccess: createSuccess};
+  window.modal = {error: createErrorPopup, success: createSuccessPopup};
 })();
