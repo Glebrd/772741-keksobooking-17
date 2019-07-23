@@ -17,6 +17,7 @@
           window.map.hide();
           window.map.removePins();
           window.map.resetMainPin();
+          window.error.createSuccess();
         }
         , window.error.create, new FormData(advertisementForm));
   };
