@@ -62,6 +62,7 @@
     window.page.disable(advertisementForm, mainPinX, mainPinY);
   });
 
+  // Проверка соответстви количества комнат количеству гостей.
   var roomCapacity = {
     1: ['1'],
     2: ['2', '1'],
@@ -72,20 +73,7 @@
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
 
-  // Запрещаем выбор количества мест (отключаем опцию), если оно не соответствует количеству комнат
-  // Для случаев, когда пользователь сначала выбирает количество комнат.
-  var onRoomNumberChange = function () {
-    var guests = roomCapacity[roomNumber.value];
-    capacity.querySelector('[value="' + guests[0] + '"]').selected = true;
-    for (var i = 0; i < capacity.options.length; i++) {
-      capacity.options[i].disabled = !guests.includes(capacity.options[i].value);
-    }
-  };
-
-  roomNumber.addEventListener('change', onRoomNumberChange);
-
-  // Запрещаем отправлять форму, если было выбрано количество мест, не соответствующще количеству комнат.
-  // Для случаев, когда пользователь сначала выбирает количество мест.
+  // Запрещаем отправлять форму, если было выбрано количество мест, не соответствующще количеству комнат или наоборот.
   var setCapacityValidity = function () {
     if (!roomCapacity[roomNumber.value].includes(capacity.value)) {
       capacity.setCustomValidity('Количество гостей не соответствует количеству комнат');
@@ -94,6 +82,19 @@
     }
   };
 
+  // Запрещаем выбор количества мест (отключаем опцию), если оно не соответствует количеству комнат
+  // Для случаев, когда пользователь сначала выбирает количество комнат.
+  var onRoomNumberChange = function () {
+    var guests = roomCapacity[roomNumber.value];
+    setCapacityValidity();
+    for (var i = 0; i < capacity.options.length; i++) {
+      capacity.options[i].disabled = guests.indexOf(capacity.options[i].value, 0);
+    }
+  };
+
+  roomNumber.addEventListener('change', onRoomNumberChange);
+
+  // Для случаев, когда пользователь сначала выбирает количество гостей.
   var onCapacityChange = function () {
     setCapacityValidity();
   };
