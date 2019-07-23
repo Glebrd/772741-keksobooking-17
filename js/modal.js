@@ -8,13 +8,13 @@
   var onButtonEscPress = function (evt) {
     window.util.isEscKey(evt, removeModal());
   };
-
+  // Добавление модального окна
   var addModal = function (element) {
     main.appendChild(element);
     document.addEventListener('keydown', onButtonEscPress);
     document.addEventListener('mousedown', onModalClick);
   };
-
+  // Удаление моадльного окна
   var removeModal = function () {
     var modal = main.querySelector('.error, .success');
     modal.remove();
@@ -23,26 +23,27 @@
   };
 
   var main = document.querySelector('main');
-  // Находим шаблон ошибки
-  var errorTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
-  var newErrorPopup = errorTemplate.cloneNode(true);
 
-  var createErrorPopup = function (message) {
-    newErrorPopup.querySelector('p').textContent = message;
-    addModal(newErrorPopup);
+  // Находим шаблон
+  var getModalTemplate = function (modalType) {
+    var errorTemplate = document.querySelector('#' + modalType)
+      .content
+      .querySelector('.' + modalType);
+    var newModal = errorTemplate.cloneNode(true);
+    return newModal;
+  };
+  // Добавление окна с сообщением об ошибке
+  var createErrorModal = function (message) {
+    var errorModal = getModalTemplate('error');
+    errorModal.querySelector('p').textContent = message;
+    addModal(errorModal);
+  };
+  // Добавление окна с сообщением об успешной загрузке.
+  var createSuccessModal = function () {
+    addModal(getModalTemplate('success'));
   };
 
-  // Находим шаблон сообщение об успехе
-  var successTemplate = document.querySelector('#success')
-    .content
-    .querySelector('.success');
-  var newSuccessPopup = successTemplate.cloneNode(true);
-
-  var createSuccessPopup = function () {
-    addModal(newSuccessPopup);
-  };
-
-  window.modal = {error: createErrorPopup, success: createSuccessPopup};
+  window.modal = {error: createErrorModal, success: createSuccessModal};
 })();
+
+
