@@ -22,12 +22,12 @@
     document.removeEventListener('mousedown', onModalClick);
   };
 
+  var main = document.querySelector('main');
   // Находим шаблон ошибки
   var errorTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
   var newErrorPopup = errorTemplate.cloneNode(true);
-  var main = document.querySelector('main');
 
   var createErrorPopup = function (message) {
     newErrorPopup.querySelector('p').textContent = message;
