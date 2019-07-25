@@ -102,4 +102,119 @@
   setCapacityValidity();
   capacity.addEventListener('change', onCapacityChange);
 
+  // Загрузка превью
+
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+  var avatarFileChooser = document.querySelector('.ad-form-header__input[type=file]');
+  var avatarPreview = document.querySelector('.ad-form-header__preview img');
+  var avatarDropZone = document.querySelector('.ad-form-header__drop-zone');
+
+  var fileUpload = function (file, preview) {
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        preview.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Обработка стандартного подбора
+  avatarFileChooser.addEventListener('change', function () {
+    fileUpload(avatarFileChooser.files[0], avatarPreview);
+  });
+  // Обработка подбора через drag and drop.
+  avatarDropZone.addEventListener('drop', function (evt) {
+    avatarFileChooser.files = evt.dataTransfer.files;
+    fileUpload(avatarFileChooser.files[0], avatarPreview);
+    avatarDropZone.style.color = '';
+  });
+
+  // Измнение стилей, при перетаскивании элемента.
+
+  var colorize = function (dropZone) {
+    dropZone.style.color = '#ff5635';
+  };
+
+  var decolorize = function (dropZone) {
+    dropZone.style.color = '';
+  };
+
+  avatarDropZone.addEventListener('dragenter', function () {
+    colorize(avatarDropZone);
+  });
+
+  avatarDropZone.addEventListener('dragleave', function () {
+    decolorize(avatarDropZone);
+  });
+
+  // Предотваращем открытие файла в новом окне, при перетягивании на страницу.
+
+  window.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  window.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+  });
+
+  // Для фотографий
+  var photosDropZone = document.querySelector('.ad-form__drop-zone');
+  var photosFileChooser = document.querySelector('.ad-form__input[type=file]');
+  var photosContainer = document.querySelector('.ad-form__photo-container');
+  var photoWrapper = document.querySelector('.ad-form__photo');
+  var createPhotoPreview = function () {
+    photoWrapper = document.querySelector('.ad-form__photo');
+    var image = document.createElement('img');
+    image.style.maxWidth = '100%';
+    image.style.maxHeight = '100%';
+    image.style.margin = '0 auto';
+    image.style.display = 'block';
+    if (photosContainer.children[photosContainer.children.length - 1].children.length !== 0) {
+      var newDiv = photoWrapper.cloneNode(true);
+      photoWrapper = newDiv;
+      photosContainer.appendChild(photoWrapper);
+    }
+    photoWrapper.appendChild(image);
+    return image;
+  };
+
+  var removePhotos = function () {
+    if (photosContainer.querySelector('img')) {
+      for (var i = photosContainer.children.length - 1; i > 1; i--) {
+        photosContainer.children[i].remove();
+      }
+      photosContainer.querySelector('img').remove();
+    }
+  };
+
+  photosDropZone.addEventListener('dragenter', function () {
+    colorize(photosDropZone);
+  });
+
+  photosDropZone.addEventListener('dragleave', function () {
+    decolorize(photosDropZone);
+  });
+
+
+  photosFileChooser.addEventListener('change', function () {
+    removePhotos();
+    for (var i = 0; i < photosFileChooser.files.length; i++) {
+      fileUpload(photosFileChooser.files[i], createPhotoPreview());
+    }
+  });
+
+  photosDropZone.addEventListener('drop', function (evt) {
+    removePhotos();
+    photosFileChooser.files = evt.dataTransfer.files;
+    for (var i = 0; i < photosFileChooser.files.length; i++) {
+      fileUpload(photosFileChooser.files[i], createPhotoPreview());
+    }
+  });
+
 })();
