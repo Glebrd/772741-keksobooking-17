@@ -204,17 +204,17 @@
 
   photosFileChooser.addEventListener('change', function () {
     removePhotos();
-    for (var i = 0; i < photosFileChooser.files.length; i++) {
-      fileUpload(photosFileChooser.files[i], createPhotoPreview());
-    }
+    Array.from(photosFileChooser.files).forEach(function (element) {
+      fileUpload(element, createPhotoPreview());
+    });
   });
 
   photosDropZone.addEventListener('drop', function (evt) {
     removePhotos();
     photosFileChooser.files = evt.dataTransfer.files;
-    for (var i = 0; i < photosFileChooser.files.length; i++) {
-      fileUpload(photosFileChooser.files[i], createPhotoPreview());
-    }
+    Array.from(photosFileChooser.files).forEach(function (element) {
+      fileUpload(element, createPhotoPreview());
+    });
   });
 
 })();
