@@ -3,39 +3,39 @@
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var advertisementForm = document.querySelector('.ad-form');
-  window.form = {
-    // Включение формы / Отключение формы
-    setAvailability: function (enable) {
-      var fieldsets = advertisementForm.querySelectorAll('.ad-form__element, .ad-form-header');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].disabled = !enable;
-      }
-    },
-    fade: function () {
-      advertisementForm.classList.add('ad-form--disabled');
-    },
-    brighten: function () {
-      advertisementForm.classList.remove('ad-form--disabled');
-    },
-    fillAdressField: function (x, y) {
-      address.value = x + ', ' + y;
-    }
-  };
-
-  var resetButton = advertisementForm.querySelector('.ad-form__reset');
-  resetButton.addEventListener('click', window.page.disable);
-
-
-  // Выключили форму при открытии страницы
-  window.form.setAvailability(window.util.DISABLE);
-
-  // Заполние поля Адрес
   var mapPin = document.querySelector('.map__pin--main');
   var mainPinY = mapPin.offsetTop;
   var mainPinX = mapPin.offsetLeft;
   var address = document.getElementById('address');
 
-  window.form.fillAdressField(mainPinX, mainPinY);
+  // Включение формы / Отключение формы
+  var setAvailability = function (enable) {
+    var fieldsets = advertisementForm.querySelectorAll('.ad-form__element, .ad-form-header');
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].disabled = !enable;
+    }
+  };
+  var fade = function () {
+    advertisementForm.classList.add('ad-form--disabled');
+  };
+  var brighten = function () {
+    advertisementForm.classList.remove('ad-form--disabled');
+  };
+  var fillAdressField = function (x, y) {
+    address.value = x + ', ' + y;
+  };
+  var resetAdressField = function () {
+    address.value = mainPinX + ', ' + mainPinY;
+  };
+
+  var resetButton = advertisementForm.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', window.page.disable);
+
+  // Выключили форму при открытии страницы
+  setAvailability(window.util.DISABLE);
+
+  // Заполние поля Адрес
+  fillAdressField(mainPinX, mainPinY);
 
   // Валидация полей "Тип жилья" и "Цена за ночь"
   var housingTypeSelect = document.querySelector('#type');
@@ -63,9 +63,14 @@
   timeInSelect.addEventListener('change', onTimeInSelect);
   timeOutSelect.addEventListener('change', onTimeOutSelect);
 
+  var doOnSuccess = function () {
+    window.modal.success();
+    window.page.disable();
+  };
+
   advertisementForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.page.disable(advertisementForm, mainPinX, mainPinY);
+    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST', new FormData(advertisementForm), doOnSuccess, window.modal.error);
   });
 
   // Проверка соответстви количества комнат количеству гостей.
@@ -218,6 +223,14 @@
     Array.from(photosFileChooser.files).forEach(function (element) {
       fileUpload(element, createPhotoPreview());
     });
+    avatarDropZone.style.color = '';
   });
 
+  window.form = {
+    setAvailability: setAvailability,
+    fade: fade,
+    brighten: brighten,
+    fillAdressField: fillAdressField,
+    resetAdressField: resetAdressField
+  };
 })();
