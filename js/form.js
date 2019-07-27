@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var advertisementForm = document.querySelector('.ad-form');
   window.form = {
     // Включение формы / Отключение формы
@@ -19,6 +21,10 @@
       address.value = x + ', ' + y;
     }
   };
+
+  var resetButton = advertisementForm.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', window.page.disable);
+
 
   // Выключили форму при открытии страницы
   window.form.setAvailability(window.util.DISABLE);
@@ -88,7 +94,7 @@
     var guests = roomCapacity[roomNumber.value];
     setCapacityValidity();
     for (var i = 0; i < capacity.options.length; i++) {
-      capacity.options[i].disabled = guests.indexOf(capacity.options[i].value, 0);
+      capacity.options[i].disabled = ((guests.indexOf(capacity.options[i].value, 0)) < 0);
     }
   };
 
@@ -103,9 +109,6 @@
   capacity.addEventListener('change', onCapacityChange);
 
   // Загрузка превью
-
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
   var avatarFileChooser = document.querySelector('.ad-form-header__input[type=file]');
   var avatarPreview = document.querySelector('.ad-form-header__preview img');
   var avatarDropZone = document.querySelector('.ad-form-header__drop-zone');

@@ -54,10 +54,12 @@
 
   var onButtonCloseClick = function () {
     removeCard();
+
   };
 
   var onButtonEscPress = function (evt) {
     window.util.isEscKey(evt, removeCard);
+    document.removeEventListener('keydown', onButtonEscPress);
   };
 
   // Добавляем карточку на страницу
