@@ -171,6 +171,10 @@
     evt.preventDefault();
   });
 
+  var removeAvatar = function () {
+    avatarPreview.src = 'img/muffin-grey.svg';
+  };
+
   // Для фотографий
   var photosDropZone = document.querySelector('.ad-form__drop-zone');
   var photosFileChooser = document.querySelector('.ad-form__input[type=file]');
@@ -231,6 +235,8 @@
     fade: fade,
     brighten: brighten,
     fillAdressField: fillAdressField,
-    resetAdressField: resetAdressField
+    resetAdressField: resetAdressField,
+    removePhotos: removePhotos,
+    removeAvatar: removeAvatar,
   };
 })();

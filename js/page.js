@@ -9,6 +9,8 @@
 
   var disablePage = function () {
     window.form.resetAdressField();
+    window.form.removePhotos();
+    window.form.removeAvatar();
     window.form.setAvailability(window.util.DISABLE);
     window.form.fade();
     window.map.hide();
