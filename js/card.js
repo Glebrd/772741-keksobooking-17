@@ -58,8 +58,11 @@
   };
 
   var onButtonEscPress = function (evt) {
-    window.util.isEscKey(evt, removeCard);
-    document.removeEventListener('keydown', onButtonEscPress);
+    window.util.isEscKey(evt, function () {
+      removeCard();
+      document.removeEventListener('keydown', onButtonEscPress);
+    });
+
   };
 
   // Добавляем карточку на страницу

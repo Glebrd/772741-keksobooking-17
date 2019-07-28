@@ -26,10 +26,11 @@
 
   // Группа фильтров features
   var choosenFeatures = [];
-  var currentFeatures = document.querySelector('.map__filters').querySelectorAll('input[type="checkbox"]:checked');
+  var mapFilters = document.querySelector('.map__filters');
 
   var getCurrentFeatures = function () {
     choosenFeatures = [];
+    var currentFeatures = mapFilters.querySelectorAll('input[type="checkbox"]:checked');
     currentFeatures.forEach(function (elment) {
       choosenFeatures.push(elment.value);
     });

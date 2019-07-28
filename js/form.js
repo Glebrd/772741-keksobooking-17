@@ -70,7 +70,7 @@
 
   advertisementForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST', new FormData(advertisementForm), doOnSuccess, window.modal.error);
+    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST', doOnSuccess, window.modal.error, new FormData(advertisementForm));
   });
 
   // Проверка соответстви количества комнат количеству гостей.
@@ -230,6 +230,10 @@
     avatarDropZone.style.color = '';
   });
 
+  var reset = function () {
+    advertisementForm.reset();
+  };
+
   window.form = {
     setAvailability: setAvailability,
     fade: fade,
@@ -238,5 +242,6 @@
     resetAdressField: resetAdressField,
     removePhotos: removePhotos,
     removeAvatar: removeAvatar,
+    reset: reset
   };
 })();

@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var exсhange = function (url, method, data, onLoad, onError) {
+  var exсhange = function (url, method, onLoad, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
