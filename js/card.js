@@ -60,7 +60,6 @@
   var onButtonEscPress = function (evt) {
     window.util.isEscKey(evt, function () {
       removeCard();
-      document.removeEventListener('keydown', onButtonEscPress);
     });
 
   };
@@ -80,6 +79,7 @@
     if (openedCard) {
       openedCard.remove();
       window.map.deactivatePin();
+      document.removeEventListener('keydown', onButtonEscPress);
     }
   };
 
