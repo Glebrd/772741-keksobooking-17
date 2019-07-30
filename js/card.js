@@ -54,10 +54,14 @@
 
   var onButtonCloseClick = function () {
     removeCard();
+
   };
 
   var onButtonEscPress = function (evt) {
-    window.util.isEscKey(evt, removeCard);
+    window.util.isEscKey(evt, function () {
+      removeCard();
+    });
+
   };
 
   // Добавляем карточку на страницу
@@ -75,6 +79,7 @@
     if (openedCard) {
       openedCard.remove();
       window.map.deactivatePin();
+      document.removeEventListener('keydown', onButtonEscPress);
     }
   };
 

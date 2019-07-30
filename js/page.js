@@ -7,19 +7,17 @@
     window.backend.exchange('https://js.dump.academy/keksobooking/data', 'GET', window.map.doOnLoad, window.modal.error);
   };
 
-  var disablePage = function (advertisementForm, mainPinX, mainPinY) {
-    window.backend.exchange('https://js.dump.academy/keksobooking', 'POST',
-        function () {
-          advertisementForm.reset();
-          window.form.fillAdressField(mainPinX, mainPinY);
-          window.form.setAvailability(window.util.DISABLE);
-          window.form.fade();
-          window.map.hide();
-          window.map.removePins();
-          window.map.resetMainPin();
-          window.modal.success();
-        }
-        , window.modal.error, new FormData(advertisementForm));
+  var disablePage = function () {
+    window.form.reset();
+    window.form.resetAdressField();
+    window.form.removePhotos();
+    window.form.removeAvatar();
+    window.form.setAvailability(window.util.DISABLE);
+    window.form.fade();
+    window.card.remove();
+    window.map.hide();
+    window.map.removePins();
+    window.map.resetMainPin();
   };
 
   window.page = {enable: enablePage, disable: disablePage};

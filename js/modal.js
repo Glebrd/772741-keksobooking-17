@@ -6,7 +6,7 @@
   };
 
   var onButtonEscPress = function (evt) {
-    window.util.isEscKey(evt, removeModal());
+    window.util.isEscKey(evt, removeModal);
   };
   // Добавление модального окна
   var addModal = function (element) {
