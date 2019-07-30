@@ -13,26 +13,26 @@
   var addFeatures = function (currentAdvertisement, cardElement) {
     var features = cardElement.querySelector('.popup__features');
     features.innerHTML = '';
-    for (var i = 0; i < currentAdvertisement.offer.features.length; i++) {
+    currentAdvertisement.offer.features.forEach(function (element) {
       var newFeature = document.createElement('li');
-      newFeature.classList.add('popup__feature', 'popup__feature--' + currentAdvertisement.offer.features[i]);
+      newFeature.classList.add('popup__feature', 'popup__feature--' + element);
       features.appendChild(newFeature);
-    }
+    });
   };
 
   // Заполняем фото
   var addPhotos = function (currentAdvertisement, cardElement) {
     var photos = cardElement.querySelector('.popup__photos');
     photos.innerHTML = '';
-    for (var i = 0; i < currentAdvertisement.offer.photos.length; i++) {
+    currentAdvertisement.offer.photos.forEach(function (element) {
       var photo = document.createElement('img');
       photo.classList.add('popup__photo');
-      photo.src = currentAdvertisement.offer.photos[i];
+      photo.src = element;
       photo.style.height = '40px';
       photo.style.width = '45px';
       photo.alt = 'Фотография жилья';
       photos.appendChild(photo);
-    }
+    });
   };
 
   var renderCard = function (currentAdvertisement) {

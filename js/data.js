@@ -14,8 +14,8 @@
 
   var housingType = {
     palace: {price: 10000, name: 'Дворец'},
-    flat: {price: 5000, name: 'Квартира'},
-    house: {price: 100, name: 'Дом'},
+    flat: {price: 1000, name: 'Квартира'},
+    house: {price: 5000, name: 'Дом'},
     bungalo: {price: 0, name: 'Бунгало'}
   };
 

@@ -29,7 +29,9 @@
   };
 
   var resetButton = advertisementForm.querySelector('.ad-form__reset');
-  resetButton.addEventListener('click', window.page.disable);
+  resetButton.addEventListener('click', function () {
+    window.page.disable();
+  });
 
   // Выключили форму при открытии страницы
   setAvailability(window.util.DISABLE);
@@ -45,6 +47,8 @@
     housingPriceInput.min = window.data.housingType[housingTypeSelect.value].price;
     housingPriceInput.placeholder = window.data.housingType[housingTypeSelect.value].price;
   };
+
+  housingTypeInputFill();
 
   housingTypeSelect.addEventListener('change', housingTypeInputFill);
 
