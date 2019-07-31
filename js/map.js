@@ -107,7 +107,13 @@
         if (currentCoordinatesX >= (-MAIN_PIN_WIDTH / 2)) {
           startCoordinates.x = moveEvt.clientX;
           mapPin.style.left = currentCoordinatesX + 'px';
+        } else {
+          startCoordinates.x = moveEvt.clientX;
+          mapPin.style.left = -MAIN_PIN_WIDTH / 2 + 'px';
         }
+      } else {
+        startCoordinates.x = moveEvt.clientX;
+        mapPin.style.left = Math.round(mapWidth - MAIN_PIN_WIDTH / 2) + 'px';
       }
       if (currentCoordinatesY <= PIN_MAX_Y - MAIN_PIN_HEIGHT) {
         if (currentCoordinatesY >= PIN_MIN_Y - MAIN_PIN_HEIGHT) {
