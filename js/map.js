@@ -113,7 +113,13 @@
         if (currentCoordinatesY >= PIN_MIN_Y - MAIN_PIN_HEIGHT) {
           startCoordinates.y = moveEvt.clientY;
           mapPin.style.top = currentCoordinatesY + 'px';
+        } else {
+          startCoordinates.y = PIN_MIN_Y - MAIN_PIN_HEIGHT;
+          mapPin.style.top = PIN_MIN_Y - MAIN_PIN_HEIGHT + 'px';
         }
+      } else {
+        startCoordinates.y = PIN_MAX_Y - MAIN_PIN_HEIGHT;
+        mapPin.style.top = PIN_MAX_Y - MAIN_PIN_HEIGHT + 'px';
       }
       window.form.fillAdressField(parseInt(mapPin.style.left, 10) + Math.floor(MAIN_PIN_WIDTH / 2), (parseInt(mapPin.style.top, 10) + MAIN_PIN_HEIGHT));
     };
