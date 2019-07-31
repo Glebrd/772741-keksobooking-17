@@ -3,8 +3,8 @@
   // Задаём количество объявлений, размеры пина и ограничения по его расположению.
   var MAIN_PIN_WIDTH = 65;
   var MAIN_PIN_HEIGHT = 84;
-  var PIN_MIN_Y = 46;
-  var PIN_MAX_Y = 546;
+  var PIN_MIN_Y = 130;
+  var PIN_MAX_Y = 630;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var MAXIMUM_NUMBER_OF_PINS = 5;
@@ -109,8 +109,8 @@
           mapPin.style.left = currentCoordinatesX + 'px';
         }
       }
-      if (currentCoordinatesY <= PIN_MAX_Y) {
-        if (currentCoordinatesY >= PIN_MIN_Y) {
+      if (currentCoordinatesY <= PIN_MAX_Y - MAIN_PIN_HEIGHT) {
+        if (currentCoordinatesY >= PIN_MIN_Y - MAIN_PIN_HEIGHT) {
           startCoordinates.y = moveEvt.clientY;
           mapPin.style.top = currentCoordinatesY + 'px';
         }
