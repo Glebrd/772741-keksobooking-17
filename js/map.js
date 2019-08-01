@@ -64,7 +64,7 @@
 
   var removePinsFromMap = function () {
     var renderedPins = similarListElement.querySelectorAll('button:not(.map__pin--main)');
-    Array.from(renderedPins).forEach(function (element) {
+    renderedPins.forEach(function (element) {
       similarListElement.removeChild(element);
     });
   };
